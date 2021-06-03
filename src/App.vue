@@ -2,7 +2,7 @@
   <component
     :is="currentPageComponent"
     :page-params="currentPageParams"
-    @goToPage="(pageName, pageParams) => goToPage(pageName, pageParams)"
+
   />
 </template>
 
@@ -28,16 +28,18 @@ export default {
     ProductPage,
     NotFoundPage,
   },
-  methods: {
-    goToPage(pageName, pageParams) {
-      this.currentPage = pageName;
-      this.currentPageParams = pageParams || {};
-    },
-  },
   computed: {
     currentPageComponent() {
       return routes[this.currentPage] || 'NotFoundPage';
     },
+  },
+  mounted() {
+    this.emitter.on('pageName', (pageName) => {
+      this.currentPage = pageName;
+    });
+    this.emitter.on('pageParams', (pageParams) => {
+      this.currentPageParams = pageParams || {};
+    });
   },
 };
 </script>

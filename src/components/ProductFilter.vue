@@ -147,6 +147,8 @@
 </template>
 
 <script>
+import numberFormat from '@/helpers/numberFormat';
+
 import categories from '../data/categories';
 import colors from '../data/productColors';
 
@@ -156,7 +158,7 @@ export default {
   data() {
     return {
       currentPriceFrom: 0,
-      currentPriceTo: this.maxPrice,
+      currentPriceTo: numberFormat(this.maxPrice),
       currentCategoryId: 0,
       currentColorId: 0,
     };
@@ -184,6 +186,7 @@ export default {
     },
   },
   methods: {
+    numberFormat,
     submit() {
       this.$emit('update:priceFrom', this.currentPriceFrom);
       this.$emit('update:priceTo', this.currentPriceTo);

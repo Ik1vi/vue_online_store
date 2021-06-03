@@ -10,6 +10,7 @@
   "dependencies": {
     "@vue/cli-plugin-eslint": "^4.5.13",
     "core-js": "^3.6.5",
+    "mitt": "^2.1.0",
     "vue": "^3.0.0"
   },
   "devDependencies": {
