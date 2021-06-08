@@ -87,7 +87,7 @@
         <span class="item__code">Артикул: {{product.id}}</span>
         <h2 class="item__title">{{product.title}}</h2>
         <div class="item__form">
-          <form class="form" action="#" method="POST">
+          <form class="form" action="#" method="POST" @submit.prevent="addToCart">
             <b class="item__price"> {{numberFormat(product.price)}} ₽ </b>
 
             <fieldset class="form__block">
@@ -168,7 +168,7 @@
                   </svg>
                 </button>
 
-                <input type="text" value="1" name="count" />
+                <input type="text" v-model.number="productAmount" />
 
                 <button type="button" aria-label="Добавить один товар">
                   <svg width="12" height="12" fill="currentColor">
@@ -247,8 +247,19 @@ import products from '@/data/products';
 import categories from '@/data/categories';
 
 export default {
+  data() {
+    return {
+      productAmount: 1,
+    };
+  },
   methods: {
     numberFormat,
+    addToCart() {
+      this.$store.commit(
+        'addProductToCart',
+        { productId: this.product.id, amount: this.productAmount },
+      );
+    },
   },
   computed: {
     product() {
