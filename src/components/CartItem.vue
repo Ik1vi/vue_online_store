@@ -20,7 +20,7 @@
         </svg>
       </button>
 
-      <input type="text" :v-model="amount" :value="amount" name="count" />
+      <input type="text" name="count" v-model.number="amount" />
 
       <button type="button" aria-label="Добавить один товар">
         <svg width="10" height="10" fill="currentColor">
@@ -31,7 +31,12 @@
 
     <b class="product__price"> {{ numberFormat(item.amount * item.product.price) }} ₽ </b>
 
-    <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины">
+    <button
+      class="product__del button-del"
+      type="button"
+      aria-label="Удалить товар из корзины"
+      @click.prevent="deleteProduct(item.productId)"
+    >
       <svg width="20" height="20" fill="currentColor">
         <use xlink:href="#icon-close"></use>
       </svg>
@@ -40,12 +45,13 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import numberFormat from '@/helpers/numberFormat';
 
 export default {
   props: ['item'],
-  emits: ['update:amount'],
   methods: {
+    ...mapMutations({ deleteProduct: 'deleteCartProduct' }),
     numberFormat,
   },
   computed: {
