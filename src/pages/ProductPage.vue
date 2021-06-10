@@ -161,21 +161,7 @@
             </fieldset>
 
             <div class="item__row">
-              <div class="form__counter">
-                <button type="button" aria-label="Убрать один товар">
-                  <svg width="12" height="12" fill="currentColor">
-                    <use xlink:href="#icon-minus"></use>
-                  </svg>
-                </button>
-
-                <input type="text" v-model.number="productAmount" />
-
-                <button type="button" aria-label="Добавить один товар">
-                  <svg width="12" height="12" fill="currentColor">
-                    <use xlink:href="#icon-plus"></use>
-                  </svg>
-                </button>
-              </div>
+              <AmountCounter class="form__counter" v-model:productAmount="productAmount"/>
 
               <button class="button button--primery" type="submit">В корзину</button>
             </div>
@@ -245,8 +231,10 @@ import numberFormat from '@/helpers/numberFormat';
 
 import products from '@/data/products';
 import categories from '@/data/categories';
+import AmountCounter from '@/components/AmountCounter.vue';
 
 export default {
+  components: { AmountCounter },
   data() {
     return {
       productAmount: 1,
