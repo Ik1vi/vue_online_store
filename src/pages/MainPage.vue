@@ -11,7 +11,7 @@
         v-model:price-to="filterPriceTo"
         v-model:category-id="filterCategoryId"
         v-model:colorId="filterColorId"
-        :max-price="findMaxPrice"
+        v-model:max-price="maxPrice"
       />
 
       <section class="catalog">
@@ -29,6 +29,7 @@ import products from '@/data/products';
 import BasePagination from '@/components/BasePagination.vue';
 import ProductList from '@/components/ProductList.vue';
 import ProductFilter from '@/components/ProductFilter.vue';
+import axios from 'axios';
 
 export default {
   components: {
@@ -44,6 +45,10 @@ export default {
       filterColorId: 0,
       page: 1,
       productsPerPage: 3,
+      maxPrice: 0,
+
+      productsData: null,
+      productsDataAll: 0,
     };
   },
 
@@ -70,18 +75,71 @@ export default {
       return filteredProducts;
     },
     productsAll() {
-      return products;
+      return this.productsDataAll ? this.productsDataAll : [];
     },
     products() {
-      const offset = (this.page - 1) * this.productsPerPage;
-      return this.filteredProducts.slice(offset, offset + this.productsPerPage);
+      return (this.productsData
+        ? this.productsData.items.map((product) => ({
+          ...product,
+          image: product.image.file.url,
+        }))
+        : []);
     },
     countProducts() {
-      return this.filteredProducts.length;
+      return this.productsData ? this.productsData.pagination.total : 0;
+    },
+  },
+  methods: {
+    loadProducts() {
+      axios.get('https://vue-study.skillbox.cc/api/products', {
+        params: {
+          page: this.page,
+          limit: this.productsPerPage,
+          categoryId: this.filterCategoryId,
+          minPrice: this.filterPriceFrom,
+          maxPrice: this.filterPriceTo,
+        },
+      })
+        .then((response) => {
+          this.productsData = response.data;
+        });
+    },
+    loadProductsAll() {
+      axios.get('https://vue-study.skillbox.cc/api/products')
+        .then((response) => {
+          this.productsDataAll = response.data.items;
+        });
     },
     findMaxPrice() {
-      return this.productsAll.reduce((max, cur) => (max < cur.price ? cur.price : max), 0);
+      // eslint-disable-next-line max-len
+      const maxDataPrice = this.productsDataAll.reduce((max, cur) => (max < cur.price ? cur.price : max), 0);
+      this.maxPrice = maxDataPrice;
+      return maxDataPrice;
     },
+  },
+  watch: {
+    page() {
+      this.loadProducts();
+    },
+    productsDataAll() {
+      this.findMaxPrice();
+    },
+    filterPriceFrom() {
+      this.loadProducts();
+    },
+    filterPriceTo() {
+      this.loadProducts();
+    },
+    filterCategoryId() {
+      this.loadProducts();
+    },
+    filterColor() {
+      this.loadProducts();
+    },
+  },
+  created() {
+    this.loadProducts();
+    this.loadProductsAll();
   },
 };
 </script>

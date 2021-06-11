@@ -161,6 +161,7 @@ export default {
       currentPriceTo: numberFormat(this.maxPrice),
       currentCategoryId: 0,
       currentColorId: 0,
+      currentMaxPrice: 0,
     };
   },
   computed: {
@@ -183,6 +184,9 @@ export default {
     },
     color(value) {
       this.currentColorId = value;
+    },
+    maxPrice(value) {
+      this.currentPriceTo = value;
     },
   },
   methods: {
