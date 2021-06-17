@@ -15,9 +15,13 @@
       />
 
       <section class="catalog">
-        <ProductList
-          :products="products"
-        />
+        <div v-if="productsLoading">Загрузка товаров...</div>
+        <div v-if="productsLoadingАфшдув">Произошла ошибка при загрузке товаров
+        <button @click.prevent="loadProducts">Попробовать снова</button>
+        </div>
+
+        <ProductList :products="products" />
+
         <BasePagination v-model:page="page" :count="countProducts" :per-page="productsPerPage" />
       </section>
     </div>
@@ -46,12 +50,16 @@ export default {
       filterPriceTo: 0,
       filterCategoryId: 0,
       filterColorId: 0,
+      maxPrice: 0,
+
       page: 1,
       productsPerPage: 3,
-      maxPrice: 0,
 
       productsData: null,
       productsDataAll: 0,
+
+      productsLoading: false,
+      productsLoadingFailed: false,
     };
   },
 
@@ -73,7 +81,10 @@ export default {
   },
   methods: {
     loadProducts() {
+      this.productsLoading = true;
+      this.productsLoadingFailed = false;
       clearTimeout(this.loadProductsTimer);
+
       this.loadProductsTimer = setTimeout(() => {
         axios
           .get(`${API_BASE_URL}/api/products`, {
@@ -87,6 +98,12 @@ export default {
           })
           .then((response) => {
             this.productsData = response.data;
+          })
+          .catch(() => {
+            this.productsLoadingFailed = false;
+          })
+          .then(() => {
+            this.productsLoading = false;
           });
       }, 0);
     },
@@ -97,8 +114,8 @@ export default {
         });
     },
     findMaxPrice() {
-      // eslint-disable-next-line max-len
-      const maxDataPrice = this.productsDataAll.reduce((max, cur) => (max < cur.price ? cur.price : max), 0);
+      const maxDataPrice = this.productsDataAll.reduce((max, cur) => (
+        max < cur.price ? cur.price : max), 0);
       this.maxPrice = numberFormat(maxDataPrice);
       return maxDataPrice;
     },
