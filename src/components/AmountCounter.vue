@@ -10,7 +10,7 @@
       </svg>
     </button>
 
-    <input type="text" v-model.number="currentproductAmount" />
+    <input type="text" readonly="readonly" v-model.number="currentproductAmount"/>
 
     <button
       type="button"

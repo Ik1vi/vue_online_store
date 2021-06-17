@@ -247,6 +247,7 @@ export default {
         'addProductToCart',
         { productId: this.product.id, amount: this.productAmount },
       );
+      this.productAmount = 1;
     },
   },
   computed: {
