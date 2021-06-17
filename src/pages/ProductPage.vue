@@ -1,5 +1,10 @@
 <template>
-  <main class="content container">
+  <main v-if="productLoading">Загрузка товара...</main>
+  <main v-if="productLoadingFailed">Не удалось загрузить товар
+    <button @click.prevent="loadProducts">Попробовать снова</button>
+  </main>
+
+  <main class="content container" v-if="productData">
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
@@ -30,8 +35,8 @@
           <img
             width="570"
             height="570"
-            :src="product.image"
-            :srcset="product.image2x"
+            :src="product.image.file.url"
+            :srcset="product.image.file.url"
             :alt="product.title"
           />
         </div>
@@ -227,10 +232,11 @@
 </template>
 
 <script>
+import axios from 'axios';
+
+import API_BASE_URL from '@/config';
 import numberFormat from '@/helpers/numberFormat';
 
-import products from '@/data/products';
-import categories from '@/data/categories';
 import AmountCounter from '@/components/AmountCounter.vue';
 
 export default {
@@ -238,7 +244,20 @@ export default {
   data() {
     return {
       productAmount: 1,
+      productId: '$route.params.id',
+
+      productData: null,
+      productLoading: false,
+      productLoadingFailed: false,
     };
+  },
+  computed: {
+    product() {
+      return this.productData ? this.productData : null;
+    },
+    category() {
+      return this.productData.category;
+    },
   },
   methods: {
     numberFormat,
@@ -249,13 +268,30 @@ export default {
       );
       this.productAmount = 1;
     },
-  },
-  computed: {
-    product() {
-      return products.find((product) => product.id === this.$route.params.id);
+    loadProduct() {
+      this.productLoading = true;
+      this.productLoadingFailed = false;
+
+      axios
+        .get(`${API_BASE_URL}/api/products/${this.$route.params.id}`, {
+        })
+        .then((response) => {
+          this.productData = response.data;
+        })
+        .catch(() => {
+          this.productLoadingFailed = false;
+        })
+        .then(() => {
+          this.productLoading = false;
+        });
     },
-    category() {
-      return categories.find((category) => category.id === this.product.categoryId);
+  },
+  watch: {
+    productId: {
+      handler() {
+        this.loadProduct();
+      },
+      immediate: true,
     },
   },
 };

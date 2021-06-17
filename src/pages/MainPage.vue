@@ -16,7 +16,7 @@
 
       <section class="catalog">
         <div v-if="productsLoading">Загрузка товаров...</div>
-        <div v-if="productsLoadingАфшдув">Произошла ошибка при загрузке товаров
+        <div v-if="productsLoadingFailed">Произошла ошибка при загрузке товаров
         <button @click.prevent="loadProducts">Попробовать снова</button>
         </div>
 
