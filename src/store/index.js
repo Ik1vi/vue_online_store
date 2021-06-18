@@ -39,7 +39,11 @@ const store = createStore({
         (acc, item) => acc + (item.product.price * item.amount), 0,
       );
     },
-    cartProductsCount(state) { return state.cartProducts.length; },
+    cartTotalProductsCount(state) {
+      return state.cartProducts.reduce(
+        (acc, item) => acc + item.amount, 0,
+      );
+    },
   },
 });
 
