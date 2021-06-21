@@ -227,8 +227,7 @@ export default {
       this.productLoadingFailed = false;
 
       axios
-        .get(`${API_BASE_URL}/api/products/${this.$route.params.id}`, {
-        })
+        .get(`${API_BASE_URL}/api/products/${this.$route.params.id}`)
         .then((response) => {
           this.productData = response.data;
         })

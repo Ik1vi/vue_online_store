@@ -5,8 +5,8 @@
         :src="item.product.image"
         width="120"
         height="120"
-        :srcset="item.product.image2x"
-        alt="item.product.title"
+        :srcset="item.product.image"
+        :alt="item.product.title"
       />
     </div>
     <h3 class="product__title">{{ item.product.title }}</h3>
