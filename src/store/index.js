@@ -87,6 +87,21 @@ const store = createStore({
           context.commit('syncCartProducts');
         });
     },
+    updateCartProductAmount(context, { productId, amount }) {
+      return axios
+        .put(`${API_BASE_URL}/api/baskets/products`, {
+          productId,
+          quantity: amount,
+        }, {
+          params: {
+            userAccessKey: context.state.userAccessKey,
+          },
+        })
+        .then((response) => {
+          context.commit('updateCartProductsData', response.data.items);
+          context.commit('syncCartProducts');
+        });
+    },
   },
 });
 
