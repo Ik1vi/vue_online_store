@@ -122,8 +122,15 @@
             <div class="item__row">
               <AmountCounter class="form__counter" v-model:productAmount="productAmount"/>
 
-              <button class="button button--primery" type="submit">В корзину</button>
+              <button
+                class="button button--primery"
+                type="submit"
+                :disabled="productAddSending">
+                  В корзину
+              </button>
             </div>
+            <div v-show="productAdded">Товар добавлен в корзину</div>
+            <div v-show="productAddSending">Добавляем товар</div>
           </form>
         </div>
       </div>
@@ -186,6 +193,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import axios from 'axios';
 
 import API_BASE_URL from '@/config';
@@ -203,6 +211,9 @@ export default {
       productData: null,
       productLoading: false,
       productLoadingFailed: false,
+
+      productAdded: false,
+      productAddSending: false,
     };
   },
   computed: {
@@ -214,13 +225,18 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['addProductToCart']),
     numberFormat,
+
     addToCart() {
-      this.$store.commit(
-        'addProductToCart',
-        { productId: this.product.id, amount: this.productAmount },
-      );
-      this.productAmount = 1;
+      this.productAdded = false;
+      this.productAddSending = true;
+
+      this.addProductToCart({ productId: this.product.id, amount: this.productAmount })
+        .then(() => {
+          this.productAdded = true;
+          this.productAddSending = false;
+        });
     },
     loadProduct() {
       this.productLoading = true;

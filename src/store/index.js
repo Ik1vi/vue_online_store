@@ -9,17 +9,6 @@ const store = createStore({
     cartProductsData: [],
   },
   mutations: {
-    addProductToCart(state, { productId, amount }) {
-      const item = state.cartProducts.find((i) => i.productId === productId);
-      if (item) {
-        item.amount += amount;
-      } else {
-        state.cartProducts.push({
-          productId,
-          amount,
-        });
-      }
-    },
     updateCartProductAmount(state, { productId, amount }) {
       const item = state.cartProducts.find((i) => i.productId === productId);
       if (item) {
@@ -68,7 +57,7 @@ const store = createStore({
   },
   actions: {
     loadCart(context) {
-      axios
+      return axios
         .get(`${API_BASE_URL}/api/baskets`, {
           params: {
             userAccessKey: context.state.userAccessKey,
@@ -79,6 +68,21 @@ const store = createStore({
             localStorage.setItem('userAccessKey', response.data.user.accessKey);
             context.commit('updateUserAccessKey', response.data.user.accessKey);
           }
+          context.commit('updateCartProductsData', response.data.items);
+          context.commit('syncCartProducts');
+        });
+    },
+    addProductToCart(context, { productId, amount }) {
+      return axios
+        .post(`${API_BASE_URL}/api/baskets/products`, {
+          productId,
+          quantity: amount,
+        }, {
+          params: {
+            userAccessKey: context.state.userAccessKey,
+          },
+        })
+        .then((response) => {
           context.commit('updateCartProductsData', response.data.items);
           context.commit('syncCartProducts');
         });
