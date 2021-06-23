@@ -9,15 +9,6 @@ const store = createStore({
     cartProductsData: [],
   },
   mutations: {
-    updateCartProductAmount(state, { productId, amount }) {
-      const item = state.cartProducts.find((i) => i.productId === productId);
-      if (item) {
-        item.amount = amount;
-      }
-    },
-    deleteCartProduct(state, productId) {
-      state.cartProducts = state.cartProducts.filter((i) => i.productId !== productId);
-    },
     updateUserAccessKey(state, accessKey) {
       state.userAccessKey = accessKey;
     },
@@ -93,6 +84,21 @@ const store = createStore({
           productId,
           quantity: amount,
         }, {
+          params: {
+            userAccessKey: context.state.userAccessKey,
+          },
+        })
+        .then((response) => {
+          context.commit('updateCartProductsData', response.data.items);
+          context.commit('syncCartProducts');
+        });
+    },
+    deleteCartProduct(context, { productId }) {
+      return axios
+        .delete(`${API_BASE_URL}/api/baskets/products`, {
+          data: {
+            productId,
+          },
           params: {
             userAccessKey: context.state.userAccessKey,
           },

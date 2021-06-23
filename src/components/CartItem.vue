@@ -21,7 +21,7 @@
       class="product__del button-del"
       type="button"
       aria-label="Удалить товар из корзины"
-      @click.prevent="deleteProduct(item.productId)"
+      @click.prevent="deleteProduct"
     >
       <svg width="20" height="20" fill="currentColor">
         <use xlink:href="#icon-close"></use>
@@ -31,7 +31,8 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapActions } from 'vuex';
+
 import numberFormat from '@/helpers/numberFormat';
 import AmountCounter from '@/components/AmountCounter.vue';
 
@@ -39,7 +40,11 @@ export default {
   props: ['item'],
   components: { AmountCounter },
   methods: {
-    ...mapMutations({ deleteProduct: 'deleteCartProduct' }),
+    ...mapActions(['deleteCartProduct']),
+
+    deleteProduct() {
+      this.deleteCartProduct({ productId: this.item.productId });
+    },
     numberFormat,
   },
   computed: {
@@ -48,7 +53,7 @@ export default {
         return this.item.amount;
       },
       set(value) {
-        this.$store.commit('updateCartProductAmount', { productId: this.item.productId, amount: value });
+        this.$store.dispatch('updateCartProductAmount', { productId: this.item.productId, amount: value });
       },
     },
   },
