@@ -15,7 +15,8 @@
       />
 
       <section class="catalog">
-        <div v-if="productsLoading">Загрузка товаров...</div>
+        <ContentPreloader v-if="productsLoading" />
+
         <div v-if="productsLoadingFailed">Произошла ошибка при загрузке товаров
         <button @click.prevent="loadProducts">Попробовать снова</button>
         </div>
@@ -35,14 +36,14 @@ import API_BASE_URL from '@/config';
 import BasePagination from '@/components/BasePagination.vue';
 import ProductList from '@/components/ProductList.vue';
 import ProductFilter from '@/components/ProductFilter.vue';
-
-import numberFormat from '@/helpers/numberFormat';
+import ContentPreloader from '@/components/ContentPreloader.vue';
 
 export default {
   components: {
     BasePagination,
     ProductList,
     ProductFilter,
+    ContentPreloader,
   },
   data() {
     return {
@@ -92,6 +93,7 @@ export default {
               page: this.page,
               limit: this.productsPerPage,
               categoryId: this.filterCategoryId,
+              colorId: this.filterColorId,
               minPrice: this.filterPriceFrom,
               maxPrice: this.filterPriceTo,
             },
@@ -108,7 +110,7 @@ export default {
       }, 0);
     },
     loadProductsAll() {
-      axios.get(`${API_BASE_URL}/api/products`)
+      return axios.get(`${API_BASE_URL}/api/products`)
         .then((response) => {
           this.productsDataAll = response.data.items;
         });
@@ -116,7 +118,7 @@ export default {
     findMaxPrice() {
       const maxDataPrice = this.productsDataAll.reduce((max, cur) => (
         max < cur.price ? cur.price : max), 0);
-      this.maxPrice = numberFormat(maxDataPrice);
+      this.maxPrice = maxDataPrice;
       return maxDataPrice;
     },
   },
@@ -136,7 +138,7 @@ export default {
     filterCategoryId() {
       this.loadProducts();
     },
-    filterColor() {
+    filterColorId() {
       this.loadProducts();
     },
   },

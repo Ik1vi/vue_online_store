@@ -4,7 +4,9 @@
       class="catalog__pic"
       :to="{name: 'product', params: {id: product.id}}"
     >
-      <img :src="product.image" :alt="product.title" />
+      <img
+        :src="product.image"
+        :alt="product.title" />
     </router-link>
 
     <h3 class="catalog__title">
@@ -19,11 +21,11 @@
           <input
             class="colors__radio sr-only"
             type="radio"
-            value="color.title"
+            :value="color.title"
           />
           <span
             class="colors__value"
-            :style="{'background-color': color.color, 'box-shadow': color.boxShadow}"
+            :style="{'background-color': color.code}"
           >
           </span>
         </label>
@@ -35,14 +37,11 @@
 <script>
 import numberFormat from '@/helpers/numberFormat';
 
-import colors from '@/data/productColors';
-
 export default {
   props: ['product'],
   data() {
     return {
       publicPath: process.env.BASE_URL,
-      color: '#73B6EA',
     };
   },
   methods: {
@@ -50,7 +49,7 @@ export default {
   },
   computed: {
     colors() {
-      return colors;
+      return this.product.colors;
     },
   },
 };

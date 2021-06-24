@@ -60,7 +60,7 @@
               />
               <span
                 class="colors__value"
-                :style="{'background-color': color.color}"
+                :style="{'background-color': color.code}"
               >
               </span>
             </label>
@@ -152,20 +152,18 @@ import axios from 'axios';
 import API_BASE_URL from '@/config';
 import numberFormat from '@/helpers/numberFormat';
 
-import colors from '../data/productColors';
-
 export default {
   props: ['priceFrom', 'priceTo', 'categoryId', 'colorId', 'maxPrice'],
   emits: ['update:priceFrom', 'update:priceTo', 'update:categoryId', 'update:colorId'],
   data() {
     return {
       currentPriceFrom: 0,
-      currentPriceTo: numberFormat(this.maxPrice),
+      currentPriceTo: this.maxPrice,
       currentCategoryId: 0,
       currentColorId: 0,
-      currentMaxPrice: 0,
 
       categoriesData: null,
+      colorsData: null,
     };
   },
   computed: {
@@ -173,7 +171,7 @@ export default {
       return this.categoriesData ? this.categoriesData.items : [];
     },
     colors() {
-      return colors;
+      return this.colorsData ? this.colorsData.items : [];
     },
   },
   watch: {
@@ -186,7 +184,7 @@ export default {
     categoryId(value) {
       this.currentCategoryId = value;
     },
-    color(value) {
+    colorId(value) {
       this.currentColorId = value;
     },
     maxPrice(value) {
@@ -206,18 +204,25 @@ export default {
       this.$emit('update:priceTo', this.maxPrice);
       this.$emit('update:categoryId', 0);
       this.$emit('update:colorId', 0);
-      this.currentColorId = 0;
     },
 
     loadCategories() {
-      axios.get(`${API_BASE_URL}/api/productCategories`)
+      return axios.get(`${API_BASE_URL}/api/productCategories`)
         .then((response) => {
           this.categoriesData = response.data;
+        });
+    },
+
+    loadColors() {
+      return axios.get(`${API_BASE_URL}/api/colors`)
+        .then((response) => {
+          this.colorsData = response.data;
         });
     },
   },
   created() {
     this.loadCategories();
+    this.loadColors();
   },
 };
 </script>
