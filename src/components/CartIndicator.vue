@@ -7,7 +7,9 @@
       class="header__count"
       aria-label="Количество товаров"
     >
-      {{$store.state.cartProducts.length}}
+      {{(!$store.state.cartProducts.length && $store.state.cartProducts.length !== 0)
+      ? 'загружаем'
+      : $store.state.cartProducts.length}}
     </span>
   </router-link>
 </template>

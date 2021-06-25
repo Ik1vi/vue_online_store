@@ -15,6 +15,7 @@
     </div>
 
     <section class="cart">
+      <ContentPreloader v-if="!products" />
       <form class="cart__form form" action="#" method="POST">
         <div class="cart__field">
           <ul class="cart__list">
@@ -35,11 +36,13 @@
 
 <script>
 import { mapGetters } from 'vuex';
+
 import numberFormat from '@/helpers/numberFormat';
 import CartItem from '@/components/CartItem.vue';
+import ContentPreloader from '@/components/ContentPreloader.vue';
 
 export default {
-  components: { CartItem },
+  components: { CartItem, ContentPreloader },
   methods: {
     numberFormat,
   },

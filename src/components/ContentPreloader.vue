@@ -4,7 +4,7 @@
         <div class="loader__square"><span></span><span></span><span></span></div>
         <div class=" loader__square"><span></span><span></span><span></span></div>
         <div class="loader__square"><span></span><span></span><span></span></div>
-        <div class="loader__text">Загрузка товаров...</div>
+        <div class="loader__text">Идет загрузка...</div>
         </div>
     </div>
 </template>

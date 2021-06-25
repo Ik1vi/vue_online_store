@@ -630,6 +630,9 @@ a {
   bottom: -1px;
   background-color: #272727;
 }
+.cart {
+    position: relative;
+}
 .cart__field {
   grid-row: 1/3;
 }
@@ -814,6 +817,11 @@ a {
   padding: 10px 5px;
   height: 50px;
   width: 60px;
+}
+.preloader-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
 }
 .options {
   margin: 0;

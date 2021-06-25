@@ -1,5 +1,7 @@
 <template>
-  <main v-if="productLoading">Загрузка товара...</main>
+  <main class="preloader-wrapper" v-if="productLoading">
+    <ContentPreloader/>
+  </main>
   <main v-if="productLoadingFailed">Не удалось загрузить товар
     <button @click.prevent="loadProducts">Попробовать снова</button>
   </main>
@@ -182,9 +184,10 @@ import API_BASE_URL from '@/config';
 import numberFormat from '@/helpers/numberFormat';
 
 import AmountCounter from '@/components/AmountCounter.vue';
+import ContentPreloader from '@/components/ContentPreloader.vue';
 
 export default {
-  components: { AmountCounter },
+  components: { AmountCounter, ContentPreloader },
   data() {
     return {
       productAmount: 1,
