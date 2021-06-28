@@ -3,13 +3,20 @@
     <svg width="30" height="21" fill="currentColor">
       <use xlink:href="#icon-cart"></use>
     </svg>
+    <img
+      class="header__icon-loading"
+      src="img/svg/icon-loading.svg"
+      alt="Иконка загрузки"
+      width="20"
+      height="20"
+      v-if="$store.state.cartDataLoading"
+    />
     <span
       class="header__count"
       aria-label="Количество товаров"
+      v-else
     >
-      {{(!$store.state.cartProducts.length && $store.state.cartProducts.length !== 0)
-      ? 'загружаем'
-      : $store.state.cartProducts.length}}
+      {{$store.state.cartProducts.length}}
     </span>
   </router-link>
 </template>

@@ -39,11 +39,6 @@ import numberFormat from '@/helpers/numberFormat';
 
 export default {
   props: ['product'],
-  data() {
-    return {
-      publicPath: process.env.BASE_URL,
-    };
-  },
   methods: {
     numberFormat,
   },

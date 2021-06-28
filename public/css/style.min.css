@@ -192,6 +192,11 @@ a {
   line-height: 1;
   color: #222;
 }
+.header__icon-loading {
+  position: absolute;
+  top: -5px;
+  right: -3px;
+}
 .content {
   -webkit-box-flex: 1;
   -ms-flex-positive: 1;

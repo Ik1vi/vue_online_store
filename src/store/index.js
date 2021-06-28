@@ -7,6 +7,7 @@ const store = createStore({
     cartProducts: [],
     userAccessKey: null,
     cartProductsData: [],
+    cartDataLoading: false,
   },
   mutations: {
     updateUserAccessKey(state, accessKey) {
@@ -20,6 +21,9 @@ const store = createStore({
         productId: item.product.id,
         amount: item.quantity,
       }));
+    },
+    updateCartDataLoading(state, loadingState) {
+      state.cartDataLoading = loadingState;
     },
   },
   getters: {
@@ -48,6 +52,7 @@ const store = createStore({
   },
   actions: {
     loadCart(context) {
+      context.commit('updateCartDataLoading', true);
       return axios
         .get(`${API_BASE_URL}/api/baskets`, {
           params: {
@@ -61,9 +66,13 @@ const store = createStore({
           }
           context.commit('updateCartProductsData', response.data.items);
           context.commit('syncCartProducts');
+        })
+        .then(() => {
+          context.commit('updateCartDataLoading', false);
         });
     },
     addProductToCart(context, { productId, amount }) {
+      context.commit('updateCartDataLoading', true);
       return axios
         .post(`${API_BASE_URL}/api/baskets/products`, {
           productId,
@@ -76,6 +85,9 @@ const store = createStore({
         .then((response) => {
           context.commit('updateCartProductsData', response.data.items);
           context.commit('syncCartProducts');
+        })
+        .then(() => {
+          context.commit('updateCartDataLoading', false);
         });
     },
     updateCartProductAmount(context, { productId, amount }) {
@@ -94,6 +106,7 @@ const store = createStore({
         });
     },
     deleteCartProduct(context, { productId }) {
+      context.commit('updateCartDataLoading', true);
       return axios
         .delete(`${API_BASE_URL}/api/baskets/products`, {
           data: {
@@ -106,6 +119,9 @@ const store = createStore({
         .then((response) => {
           context.commit('updateCartProductsData', response.data.items);
           context.commit('syncCartProducts');
+        })
+        .then(() => {
+          context.commit('updateCartDataLoading', false);
         });
     },
   },

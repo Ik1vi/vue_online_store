@@ -191,7 +191,6 @@ export default {
   data() {
     return {
       productAmount: 1,
-      productId: '$route.params.id',
 
       productData: null,
       productLoading: false,
@@ -202,6 +201,9 @@ export default {
     };
   },
   computed: {
+    productId() {
+      return this.$route.params.id;
+    },
     product() {
       return this.productData ? this.productData : null;
     },
@@ -231,7 +233,7 @@ export default {
       this.productLoadingFailed = false;
 
       return axios
-        .get(`${API_BASE_URL}/api/products/${this.$route.params.id}`)
+        .get(`${API_BASE_URL}/api/products/${this.productId}`)
         .then((response) => {
           this.productData = response.data;
         })
