@@ -1,8 +1,12 @@
-import { createStore } from 'vuex';
+import Vue from 'vue';
+import Vuex from 'vuex';
+
 import axios from 'axios';
 import API_BASE_URL from '@/config';
 
-const store = createStore({
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
   state: {
     cartProducts: [],
     userAccessKey: null,

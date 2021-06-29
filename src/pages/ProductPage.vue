@@ -1,4 +1,5 @@
 <template>
+<div>
   <main class="preloader-wrapper" v-if="productLoading">
     <ContentPreloader/>
   </main>
@@ -104,7 +105,7 @@
             </fieldset>
 
             <div class="item__row">
-              <AmountCounter class="form__counter" v-model:productAmount="productAmount"/>
+              <AmountCounter class="form__counter" v-model="productAmount"/>
 
               <button
                 class="button button--primery"
@@ -174,6 +175,7 @@
       </div>
     </section>
   </main>
+</div>
 </template>
 
 <script>

@@ -44,7 +44,10 @@
 <script>
 export default {
   props: ['page', 'count', 'perPage'],
-  emits: ['update:page'],
+  model: {
+    prop: 'page',
+    event: 'paginate',
+  },
   data() {
     return {
       prevBtnIsDisabled: false,
@@ -58,14 +61,14 @@ export default {
   },
   methods: {
     paginate(page) {
-      this.$emit('update:page', page);
+      this.$emit('paginate', page);
     },
     nextPage() {
       if (this.page === this.pages) {
         this.nextBtnIsDisabled = true;
       } else {
         this.nextBtnIsDisabled = false;
-        this.$emit('update:page', this.page + 1);
+        this.$emit('paginate', this.page + 1);
       }
     },
     previousPage() {
@@ -73,7 +76,7 @@ export default {
         this.prevBtnIsDisabled = true;
       } else {
         this.prevBtnIsDisabled = false;
-        this.$emit('update:page', this.page - 1);
+        this.$emit('paginate', this.page - 1);
       }
     },
   },

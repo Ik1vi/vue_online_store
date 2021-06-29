@@ -6,13 +6,13 @@
     </div>
 
     <div class="content__catalog">
-      <ProductFilter
-        v-model:price-from="filterPriceFrom"
-        v-model:price-to="filterPriceTo"
-        v-model:category-id="filterCategoryId"
-        v-model:colorId="filterColorId"
-        v-model:max-price="maxPrice"
-      />
+      <!-- <ProductFilter
+        :price-from.sync="filterPriceFrom"
+        :price-to.sync="filterPriceTo"
+        :category-id.sync="filterCategoryId"
+        :colorId.sync="filterColorId"
+        :max-price.sync="maxPrice"
+      /> -->
 
       <section class="catalog">
         <ContentPreloader v-if="productsLoading" />
@@ -23,7 +23,7 @@
 
         <ProductList :products="products" />
 
-        <BasePagination v-model:page="page" :count="countProducts" :per-page="productsPerPage" />
+        <BasePagination v-model="page" :count="countProducts" :per-page="productsPerPage" />
       </section>
     </div>
   </main>
@@ -35,14 +35,14 @@ import API_BASE_URL from '@/config';
 
 import BasePagination from '@/components/BasePagination.vue';
 import ProductList from '@/components/ProductList.vue';
-import ProductFilter from '@/components/ProductFilter.vue';
+// import ProductFilter from '@/components/ProductFilter.vue';
 import ContentPreloader from '@/components/ContentPreloader.vue';
 
 export default {
   components: {
     BasePagination,
     ProductList,
-    ProductFilter,
+    // ProductFilter,
     ContentPreloader,
   },
   data() {
