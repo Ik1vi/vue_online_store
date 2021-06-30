@@ -5,7 +5,7 @@
     </svg>
     <img
       class="header__icon-loading"
-      src="img/svg/icon-loading.svg"
+      src="/img/svg/icon-loading.svg"
       alt="Иконка загрузки"
       width="20"
       height="20"
