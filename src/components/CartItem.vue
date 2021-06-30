@@ -7,13 +7,24 @@
         height="120"
         :srcset="item.product.image"
         :alt="item.product.title"
-      />
+      >
     </div>
-    <h3 class="product__title">{{ item.product.title }}</h3>
-    <p class="product__info">Объем: <span>128GB</span></p>
+    <h3 class="product__title">
+      <router-link
+        :to="{name: 'product', params: {id: item.product.id}}"
+      >
+        {{ item.product.title }}
+      </router-link>
+    </h3>
+    <p class="product__info">
+      Объем: <span>128GB</span>
+    </p>
     <span class="product__code"> Артикул: {{ item.product.id }} </span>
 
-    <AmountCounter class="product__counter form__counter" v-model:productAmount="amount"/>
+    <AmountCounter
+      :product-amount.sync="amount"
+      class="product__counter form__counter"
+    />
 
     <b class="product__price"> {{ numberFormat(item.amount * item.product.price) }} ₽ </b>
 
@@ -23,8 +34,12 @@
       aria-label="Удалить товар из корзины"
       @click.prevent="deleteProduct"
     >
-      <svg width="20" height="20" fill="currentColor">
-        <use xlink:href="#icon-close"></use>
+      <svg
+        width="20"
+        height="20"
+        fill="currentColor"
+      >
+        <use xlink:href="#icon-close" />
       </svg>
     </button>
   </li>

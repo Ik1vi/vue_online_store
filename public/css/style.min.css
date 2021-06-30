@@ -769,6 +769,15 @@ a {
   font-size: 16px;
   line-height: 22px;
 }
+.product__title a {
+  color: #222;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+.product__title a:focus,
+.product__title a:hover {
+  opacity: 0.6;
+}
 .product__info {
   grid-row: 2/3;
   font-size: 14px;
@@ -1210,8 +1219,7 @@ a {
 /* page preloader */
 
 .loader {
-  height: 100%;
-  width: 100%;
+  z-index: -1;
 }
 .loader .loader__main {
   position: absolute;

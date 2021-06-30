@@ -1,29 +1,38 @@
 <template>
   <main class="content container">
     <div class="content__top content__top--catalog">
-      <h1 class="content__title">Каталог</h1>
+      <h1 class="content__title">
+        Каталог
+      </h1>
       <span class="content__info"> 152 товара </span>
     </div>
 
     <div class="content__catalog">
-      <!-- <ProductFilter
+      <ProductFilter
         :price-from.sync="filterPriceFrom"
         :price-to.sync="filterPriceTo"
         :category-id.sync="filterCategoryId"
-        :colorId.sync="filterColorId"
+        :color-id.sync="filterColorId"
         :max-price.sync="maxPrice"
-      /> -->
+      />
 
       <section class="catalog">
         <ContentPreloader v-if="productsLoading" />
 
-        <div v-if="productsLoadingFailed">Произошла ошибка при загрузке товаров
-        <button @click.prevent="loadProducts">Попробовать снова</button>
+        <div v-if="productsLoadingFailed">
+          Произошла ошибка при загрузке товаров
+          <button @click.prevent="loadProducts">
+            Попробовать снова
+          </button>
         </div>
 
         <ProductList :products="products" />
 
-        <BasePagination v-model="page" :count="countProducts" :per-page="productsPerPage" />
+        <BasePagination
+          v-model="page"
+          :count="countProducts"
+          :per-page="productsPerPage"
+        />
       </section>
     </div>
   </main>
@@ -35,14 +44,14 @@ import API_BASE_URL from '@/config';
 
 import BasePagination from '@/components/BasePagination.vue';
 import ProductList from '@/components/ProductList.vue';
-// import ProductFilter from '@/components/ProductFilter.vue';
+import ProductFilter from '@/components/ProductFilter.vue';
 import ContentPreloader from '@/components/ContentPreloader.vue';
 
 export default {
   components: {
     BasePagination,
     ProductList,
-    // ProductFilter,
+    ProductFilter,
     ContentPreloader,
   },
   data() {
@@ -100,12 +109,10 @@ export default {
           })
           .then((response) => {
             this.productsData = response.data;
+            this.productsLoading = false;
           })
           .catch(() => {
             this.productsLoadingFailed = false;
-          })
-          .then(() => {
-            this.productsLoading = false;
           });
       }, 0);
     },

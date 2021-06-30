@@ -5,20 +5,32 @@
       aria-label="Убрать один товар"
       @click="decrement"
     >
-      <svg width="12" height="12" fill="currentColor">
-        <use xlink:href="#icon-minus"></use>
+      <svg
+        width="12"
+        height="12"
+        fill="currentColor"
+      >
+        <use xlink:href="#icon-minus" />
       </svg>
     </button>
 
-    <input type="text" disabled v-model.number="currentproductAmount"/>
+    <input
+      type="text"
+      disabled
+      v-model.number="currentproductAmount"
+    >
 
     <button
       type="button"
       aria-label="Добавить один товар"
       @click="increment"
     >
-      <svg width="12" height="12" fill="currentColor">
-        <use xlink:href="#icon-plus"></use>
+      <svg
+        width="12"
+        height="12"
+        fill="currentColor"
+      >
+        <use xlink:href="#icon-plus" />
       </svg>
     </button>
   </div>
@@ -27,7 +39,6 @@
 <script>
 export default {
   props: ['productAmount'],
-  emits: ['update:productAmount'],
   data() {
     return {
       currentproductAmount: this.productAmount,
@@ -39,9 +50,6 @@ export default {
     },
   },
   methods: {
-    amount(productAmount) {
-      this.$emit('update:productAmount', productAmount);
-    },
     increment() {
       this.$emit('update:productAmount', this.productAmount + 1);
     },
