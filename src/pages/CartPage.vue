@@ -36,9 +36,14 @@
             <span>{{ numberFormat(totalPrice) }} ₽</span>
           </p>
 
-          <button class="cart__button button button--primery" type="submit">
+          <router-link
+            class="cart__button button button--primery"
+            tag="button"
+            type="submit"
+            :to="{name: 'order'}"
+          >
             Оформить заказ
-          </button>
+          </router-link>
         </div>
       </form>
     </section>
