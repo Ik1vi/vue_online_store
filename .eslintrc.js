@@ -11,9 +11,5 @@ module.exports = {
     parser: 'babel-eslint',
   },
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'vue/require-prop-types': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    // 'vue/max-attributes-per-line': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
   },
 };

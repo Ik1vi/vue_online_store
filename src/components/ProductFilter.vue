@@ -257,8 +257,6 @@ export default {
         .get(`${API_BASE_URL}/api/productCategories`)
         .then((response) => {
           this.categoriesData = response.data;
-          console.log(this.categoriesData);
-          console.log(response.data);
         });
     },
 
