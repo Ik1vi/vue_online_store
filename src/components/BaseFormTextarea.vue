@@ -1,30 +1,18 @@
 <template>
 <BaseFormField :title="title" :error="error">
-  <input
-    class="form__input"
-    type="text"
-    name="name"
+  <textarea
+    class="form__input form__input--area"
     :placeholder="placeholder"
     v-model="dataValue"
   >
+  </textarea>
 </BaseFormField>
 </template>
 
 <script>
-import BaseFormField from '@/components/BaseFormField.vue';
+import formFieldMixin from '@/mixins/formFieldMixin';
 
 export default {
-  components: { BaseFormField },
-  props: ['title', 'error', 'placeholder', 'value'],
-  computed: {
-    dataValue: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.$emit('input', value);
-      },
-    },
-  },
+  mixins: [formFieldMixin],
 };
 </script>

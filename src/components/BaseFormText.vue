@@ -2,8 +2,7 @@
 <BaseFormField :title="title" :error="error">
   <input
     class="form__input"
-    type="text"
-    name="name"
+    :type="type"
     :placeholder="placeholder"
     v-model="dataValue"
   >
@@ -11,19 +10,13 @@
 </template>
 
 <script>
-import BaseFormField from '@/components/BaseFormField.vue';
+import formFieldMixin from '@/mixins/formFieldMixin';
 
 export default {
-  components: { BaseFormField },
-  props: ['title', 'error', 'placeholder', 'value'],
-  computed: {
-    dataValue: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.$emit('input', value);
-      },
+  mixins: [formFieldMixin],
+  props: {
+    type: {
+      default: 'text',
     },
   },
 };
