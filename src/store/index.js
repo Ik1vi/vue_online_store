@@ -14,6 +14,10 @@ const store = new Vuex.Store({
     cartDataLoading: false,
   },
   mutations: {
+    resetCart(state) {
+      state.cartProducts = [];
+      state.cartProductsData = [];
+    },
     updateUserAccessKey(state, accessKey) {
       state.userAccessKey = accessKey;
     },
@@ -52,6 +56,15 @@ const store = new Vuex.Store({
       return state.cartProducts.reduce(
         (acc, item) => acc + item.amount, 0,
       );
+    },
+    cartTotalProductText(state, getters) {
+      const endings = ['товар', 'товара', 'товаров'];
+      function productEnding(number) {
+        return endings[
+          (number % 100 > 4 && number % 100 < 20) ? 2
+            : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? number % 10 : 5]];
+      }
+      return `${getters.cartTotalProductsCount} ${productEnding(getters.cartTotalProductsCount)}`;
     },
   },
   actions: {

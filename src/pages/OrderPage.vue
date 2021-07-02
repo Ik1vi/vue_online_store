@@ -3,14 +3,14 @@
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="index.html">
+          <router-link class="breadcrumbs__link" :to="{name: 'main'}">
             Каталог
-          </a>
+          </router-link>
         </li>
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="cart.html">
+          <router-link class="breadcrumbs__link" :to="{name: 'cart'}">
             Корзина
-          </a>
+          </router-link>
         </li>
         <li class="breadcrumbs__item">
           <a class="breadcrumbs__link">
@@ -23,12 +23,12 @@
         Корзина
       </h1>
       <span class="content__info">
-        3 товара
+        {{ totalProductsCount }}
       </span>
     </div>
 
     <section class="cart">
-      <form class="cart__form form" action="#" method="POST">
+      <form class="cart__form form" action="#" method="POST" @submit.prevent="order">
         <div class="cart__field">
           <div class="cart__data">
             <BaseFormText
@@ -61,9 +61,9 @@
 
             <BaseFormTextarea
               title="Комментарий к заказу"
-              :error="formError.comments"
+              :error="formError.comment"
               placeholder="Ваши пожелания"
-              v-model="formData.comments"
+              v-model="formData.comment"
             />
           </div>
 
@@ -118,36 +118,22 @@
 
         <div class="cart__block">
           <ul class="cart__orders">
-            <li class="cart__order">
-              <h3>Смартфон Xiaomi Redmi Note 7 Pro 6/128GB</h3>
-              <b>18 990 ₽</b>
-              <span>Артикул: 150030</span>
-            </li>
-            <li class="cart__order">
-              <h3>Гироскутер Razor Hovertrax 2.0ii</h3>
-              <b>4 990 ₽</b>
-              <span>Артикул: 150030</span>
-            </li>
-            <li class="cart__order">
-              <h3>Электрический дрифт-карт Razor Lil’ Crazy</h3>
-              <b>8 990 ₽</b>
-              <span>Артикул: 150030</span>
-            </li>
+            <OrderItem v-for="item in products" :key="item.productId" :item="item" />
           </ul>
 
           <div class="cart__total">
             <p>Доставка: <b>500 ₽</b></p>
-            <p>Итого: <b>3</b> товара на сумму <b>37 970 ₽</b></p>
+            <p>Итого: {{ totalProductsCount }} на сумму <b>{{ numberFormat(totalPrice) }} ₽</b></p>
           </div>
 
           <button class="cart__button button button--primery" type="submit">
             Оформить заказ
           </button>
         </div>
-        <div class="cart__error form__error-block">
+        <div class="cart__error form__error-block" v-if="formErrorMessage">
           <h4>Заявка не отправлена!</h4>
           <p>
-            Похоже произошла ошибка. Попробуйте отправить снова или перезагрузите страницу.
+            {{formErrorMessage}}
           </p>
         </div>
       </form>
@@ -156,16 +142,55 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import axios from 'axios';
+
+import API_BASE_URL from '@/config';
+import numberFormat from '@/helpers/numberFormat';
+
 import BaseFormText from '@/components/BaseFormText.vue';
 import BaseFormTextarea from '@/components/BaseFormTextarea.vue';
+import OrderItem from '@/components/OrderItem.vue';
 
 export default {
   data() {
     return {
       formData: {},
       formError: {},
+      formErrorMessage: '',
     };
   },
-  components: { BaseFormText, BaseFormTextarea },
+  components: { BaseFormText, BaseFormTextarea, OrderItem },
+  methods: {
+    numberFormat,
+    order() {
+      this.formError = {};
+      this.formErrorMessage = '';
+
+      return axios
+        .post(`${API_BASE_URL}/api/orders`, {
+          ...this.formData,
+        },
+        {
+          params: {
+            userAccessKey: this.$store.state.userAccessKey,
+          },
+        })
+        .then(() => {
+          this.$store.commit('resetCart');
+        })
+        .catch((error) => {
+          this.formError = error.response.data.error.request || {};
+          this.formErrorMessage = error.response.data.error.message || '';
+        });
+    },
+  },
+  computed: {
+    ...mapGetters({
+      products: 'cartDetailProducts',
+      totalPrice: 'cartTotalPrice',
+      totalProductsCount: 'cartTotalProductText',
+    }),
+  },
 };
 </script>

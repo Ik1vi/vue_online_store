@@ -726,6 +726,10 @@ a {
   font-size: 16px;
   line-height: 24px;
 }
+.cart__order-price {
+  display: flex;
+  flex-wrap: wrap;
+}
 .cart__order span {
   font-size: 12px;
   line-height: 1;
