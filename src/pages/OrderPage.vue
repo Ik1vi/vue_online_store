@@ -116,20 +116,16 @@
           </div>
         </div>
 
-        <div class="cart__block">
-          <ul class="cart__orders">
-            <OrderItem v-for="item in products" :key="item.productId" :item="item" />
-          </ul>
-
-          <div class="cart__total">
-            <p>Доставка: <b>500 ₽</b></p>
-            <p>Итого: {{ totalProductsCount }} на сумму <b>{{ numberFormat(totalPrice) }} ₽</b></p>
-          </div>
-
+        <OrderCartBlock
+          :products="products"
+          :totalPrice="totalPrice"
+          :totalProductsCount="totalProductsCount"
+        >
           <button class="cart__button button button--primery" type="submit">
             Оформить заказ
           </button>
-        </div>
+        </OrderCartBlock>
+
         <div class="cart__error form__error-block" v-if="formErrorMessage">
           <h4>Заявка не отправлена!</h4>
           <p>
@@ -150,17 +146,23 @@ import numberFormat from '@/helpers/numberFormat';
 
 import BaseFormText from '@/components/BaseFormText.vue';
 import BaseFormTextarea from '@/components/BaseFormTextarea.vue';
-import OrderItem from '@/components/OrderItem.vue';
+import OrderCartBlock from '@/components/OrderCartBlock.vue';
 
 export default {
   data() {
     return {
-      formData: {},
+      formData: {
+        name: 'name',
+        address: 'hdchdc',
+        phone: '+7123456777',
+        email: 'hdh@jjj.ru',
+        comment: '',
+      },
       formError: {},
       formErrorMessage: '',
     };
   },
-  components: { BaseFormText, BaseFormTextarea, OrderItem },
+  components: { BaseFormText, BaseFormTextarea, OrderCartBlock },
   methods: {
     numberFormat,
     order() {
@@ -176,8 +178,10 @@ export default {
             userAccessKey: this.$store.state.userAccessKey,
           },
         })
-        .then(() => {
+        .then((response) => {
+          this.$store.commit('updateOrderInfo', response.data);
           this.$store.commit('resetCart');
+          this.$router.push({ name: 'orderInfo', params: { id: response.data.id } });
         })
         .catch((error) => {
           this.formError = error.response.data.error.request || {};

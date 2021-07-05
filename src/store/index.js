@@ -12,12 +12,9 @@ const store = new Vuex.Store({
     userAccessKey: null,
     cartProductsData: [],
     cartDataLoading: false,
+    orderInfo: [],
   },
   mutations: {
-    resetCart(state) {
-      state.cartProducts = [];
-      state.cartProductsData = [];
-    },
     updateUserAccessKey(state, accessKey) {
       state.userAccessKey = accessKey;
     },
@@ -32,6 +29,13 @@ const store = new Vuex.Store({
     },
     updateCartDataLoading(state, loadingState) {
       state.cartDataLoading = loadingState;
+    },
+    resetCart(state) {
+      state.cartProducts = [];
+      state.cartProductsData = [];
+    },
+    updateOrderInfo(state, orderInfo) {
+      state.orderInfo = orderInfo;
     },
   },
   getters: {
@@ -65,6 +69,20 @@ const store = new Vuex.Store({
             : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? number % 10 : 5]];
       }
       return `${getters.cartTotalProductsCount} ${productEnding(getters.cartTotalProductsCount)}`;
+    },
+    orderTotalProductsCount(state) {
+      return state.orderInfo.basket.items.reduce(
+        (acc, item) => acc + item.quantity, 0,
+      );
+    },
+    orderTotalProductText(state, getters) {
+      const endings = ['товар', 'товара', 'товаров'];
+      function productEnding(number) {
+        return endings[
+          (number % 100 > 4 && number % 100 < 20) ? 2
+            : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? number % 10 : 5]];
+      }
+      return `${getters.orderTotalProductsCount} ${productEnding(getters.orderTotalProductsCount)}`;
     },
   },
   actions: {
@@ -139,6 +157,17 @@ const store = new Vuex.Store({
         })
         .then(() => {
           context.commit('updateCartDataLoading', false);
+        });
+    },
+    loadOrderInfo(context, orderId) {
+      return axios
+        .get(`${API_BASE_URL}/api/orders/ + ${orderId}`, {
+          params: {
+            userAccessKey: context.state.userAccessKey,
+          },
+        })
+        .then((response) => {
+          context.commit('updateOrderInfo', response.data);
         });
     },
   },
