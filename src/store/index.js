@@ -12,7 +12,7 @@ const store = new Vuex.Store({
     userAccessKey: null,
     cartProductsData: [],
     cartDataLoading: false,
-    orderInfo: [],
+    orderInfo: null,
   },
   mutations: {
     updateUserAccessKey(state, accessKey) {
@@ -69,6 +69,17 @@ const store = new Vuex.Store({
             : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? number % 10 : 5]];
       }
       return `${getters.cartTotalProductsCount} ${productEnding(getters.cartTotalProductsCount)}`;
+    },
+    orderDetailProducts(state) {
+      return state.orderInfo.basket.items.map((item) => ({
+        ...item,
+        amount: item.quantity,
+        product: {
+          ...item.product,
+          image: item.product.image.file.url,
+          productId: item.product.Id,
+        },
+      }));
     },
     orderTotalProductsCount(state) {
       return state.orderInfo.basket.items.reduce(
@@ -161,7 +172,7 @@ const store = new Vuex.Store({
     },
     loadOrderInfo(context, orderId) {
       return axios
-        .get(`${API_BASE_URL}/api/orders/ + ${orderId}`, {
+        .get(`${API_BASE_URL}/api/orders/${orderId}`, {
           params: {
             userAccessKey: context.state.userAccessKey,
           },

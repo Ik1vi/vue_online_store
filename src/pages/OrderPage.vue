@@ -124,6 +124,8 @@
           <button class="cart__button button button--primery" type="submit">
             Оформить заказ
           </button>
+          <div v-show="orderAdded">Заказ оформлен</div>
+          <div v-show="orderSending">Оформляем заказ</div>
         </OrderCartBlock>
 
         <div class="cart__error form__error-block" v-if="formErrorMessage">
@@ -151,15 +153,11 @@ import OrderCartBlock from '@/components/OrderCartBlock.vue';
 export default {
   data() {
     return {
-      formData: {
-        name: 'name',
-        address: 'hdchdc',
-        phone: '+7123456777',
-        email: 'hdh@jjj.ru',
-        comment: '',
-      },
+      formData: {},
       formError: {},
       formErrorMessage: '',
+      orderAdded: false,
+      orderSending: false,
     };
   },
   components: { BaseFormText, BaseFormTextarea, OrderCartBlock },
@@ -168,6 +166,8 @@ export default {
     order() {
       this.formError = {};
       this.formErrorMessage = '';
+      this.orderAdded = false;
+      this.orderSending = true;
 
       return axios
         .post(`${API_BASE_URL}/api/orders`, {
@@ -179,11 +179,16 @@ export default {
           },
         })
         .then((response) => {
+          this.orderAdded = true;
+          this.orderSending = false;
+
           this.$store.commit('updateOrderInfo', response.data);
           this.$store.commit('resetCart');
           this.$router.push({ name: 'orderInfo', params: { id: response.data.id } });
         })
         .catch((error) => {
+          this.orderAdded = false;
+          this.orderSending = false;
           this.formError = error.response.data.error.request || {};
           this.formErrorMessage = error.response.data.error.message || '';
         });
