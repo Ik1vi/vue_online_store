@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "push": "cd dist && git push -f https://github.com/Ik1vi/vue_online_store_deploy.git main:gh-pages"
   },
   "dependencies": {
     "@vue/cli-plugin-eslint": "^4.5.13",
