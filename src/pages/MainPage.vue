@@ -56,10 +56,11 @@ export default {
   },
   data() {
     return {
-      filterPriceFrom: 0,
-      filterPriceTo: 0,
+      filterPriceFrom: 1,
+      filterPriceTo: 100000,
       filterCategoryId: 0,
       filterColorId: 0,
+      filterProps: [],
       maxPrice: 0,
 
       page: 1,
@@ -81,7 +82,7 @@ export default {
       return (this.productsData
         ? this.productsData.items.map((product) => ({
           ...product,
-          image: product.image.file.url,
+          image: product.preview.file.url,
         }))
         : []);
     },
@@ -102,7 +103,7 @@ export default {
               page: this.page,
               limit: this.productsPerPage,
               categoryId: this.filterCategoryId,
-              colorId: this.filterColorId,
+              props: [],
               minPrice: this.filterPriceFrom,
               maxPrice: this.filterPriceTo,
             },

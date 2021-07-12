@@ -239,7 +239,7 @@ a {
 }
 .content__catalog {
     display: grid;
-    grid-template-columns: minmax(260px, 350px) auto;
+    grid-template-columns: minmax(260px, 290px) auto;
     grid-gap: 20px;
     -webkit-box-align: start;
     -ms-flex-align: start;

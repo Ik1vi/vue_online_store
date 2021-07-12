@@ -204,7 +204,7 @@ export default {
   props: ['priceFrom', 'priceTo', 'categoryId', 'colorId', 'maxPrice'],
   data() {
     return {
-      currentPriceFrom: 0,
+      currentPriceFrom: 1,
       currentPriceTo: this.maxPrice,
       currentCategoryId: 0,
       currentColorId: 0,

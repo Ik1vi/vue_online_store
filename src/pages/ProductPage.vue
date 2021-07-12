@@ -38,8 +38,8 @@
             <img
               width="570"
               height="570"
-              :src="product.image.file.url"
-              :srcset="product.image.file.url"
+              :src="product.preview.file.url"
+              :srcset="product.preview.file.url"
               :alt="product.title"
             />
           </div>
@@ -55,17 +55,17 @@
               <fieldset class="form__block">
                 <legend class="form__legend">Цвет:</legend>
                 <ul class="colors">
-                  <li class="colors__item" v-for="color in colors" :key="color.id">
+                  <li class="colors__item" v-for="color in product.colors" :key="color.color.id">
                     <label class="colors__label">
                       <input
                         class="colors__radio sr-only"
                         type="radio"
                         name="color"
-                        :value="color.id"
+                        :value="color.color.id"
                       />
                       <span
                         class="colors__value"
-                        :style="{'background-color': color.code}"
+                        :style="{'background-color': color.color.code}"
                       >
                       </span>
                     </label>
@@ -74,41 +74,21 @@
               </fieldset>
 
               <fieldset class="form__block">
-                <legend class="form__legend">Объемб в ГБ:</legend>
+                <legend class="form__legend">{{product.mainProp.title}}</legend>
 
                 <ul class="sizes sizes--primery">
-                  <li class="sizes__item">
+                  <li
+                    class="sizes__item"
+                    v-for="offer in product.offers"
+                    :key="offer.id"
+                  >
                     <label class="sizes__label">
                       <input
                         class="sizes__radio sr-only"
                         type="radio"
                         name="sizes-item"
-                        value="32"
                       />
-                      <span class="sizes__value"> 32gb </span>
-                    </label>
-                  </li>
-                  <li class="sizes__item">
-                    <label class="sizes__label">
-                      <input
-                        class="sizes__radio sr-only"
-                        type="radio"
-                        name="sizes-item"
-                        value="64"
-                      />
-                      <span class="sizes__value"> 64gb </span>
-                    </label>
-                  </li>
-                  <li class="sizes__item">
-                    <label class="sizes__label">
-                      <input
-                        class="sizes__radio sr-only"
-                        type="radio"
-                        name="sizes-item"
-                        value="128"
-                        checked=""
-                      />
-                      <span class="sizes__value"> 128gb </span>
+                      <span class="sizes__value"> {{offer.propValues.value}} </span>
                     </label>
                   </li>
                 </ul>
