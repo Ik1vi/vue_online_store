@@ -27,7 +27,7 @@
             </router-link>
           </li>
           <li class="breadcrumbs__item">
-            <a class="breadcrumbs__link"> {{product.title}} </a>
+            <a class="breadcrumbs__link"> {{currentTitle}} </a>
           </li>
         </ul>
       </div>
@@ -47,10 +47,10 @@
 
         <div class="item__info">
           <span class="item__code">Артикул: {{product.id}}</span>
-          <h2 class="item__title">{{product.title}}</h2>
+          <h2 class="item__title">{{currentTitle}}</h2>
           <div class="item__form">
             <form class="form" action="#" method="POST" @submit.prevent="addToCart">
-              <b class="item__price"> {{numberFormat(product.price)}} ₽ </b>
+              <b class="item__price"> {{numberFormat(currentPrice)}} ₽ </b>
 
               <fieldset class="form__block">
                 <legend class="form__legend">Цвет:</legend>
@@ -62,6 +62,8 @@
                         type="radio"
                         name="color"
                         :value="color.color.id"
+                        :checked="isColorChecked(color.color.id)"
+                        @click="chooseColor(color.color.id)"
                       />
                       <span
                         class="colors__value"
@@ -87,8 +89,10 @@
                         class="sizes__radio sr-only"
                         type="radio"
                         name="sizes-item"
+                        :checked="isOfferChecked(offer.id)"
+                        @click="chooseOffer(offer.id)"
                       />
-                      <span class="sizes__value"> {{offer.propValues.value}} </span>
+                      <span class="sizes__value"> {{offer.propValues[0].value}} </span>
                     </label>
                   </li>
                 </ul>
@@ -193,6 +197,11 @@ export default {
 
       productAdded: false,
       productAddSending: false,
+
+      currentColorId: 0,
+      currentOfferPropId: 0,
+      currentTitle: '',
+      currentPrice: 0,
     };
   },
   computed: {
@@ -217,7 +226,11 @@ export default {
       this.productAdded = false;
       this.productAddSending = true;
 
-      this.addProductToCart({ productId: this.product.id, amount: this.productAmount })
+      this.addProductToCart({
+        productOfferId: this.currentOfferPropId,
+        colorId: this.currentColorId,
+        quantity: this.productAmount,
+      })
         .then(() => {
           this.productAdded = true;
           this.productAddSending = false;
@@ -232,6 +245,10 @@ export default {
         .get(`${API_BASE_URL}/api/products/${this.productId}`)
         .then((response) => {
           this.productData = response.data;
+          this.currentColorId = response.data.colors[0].color.id;
+          this.currentOfferPropId = response.data.offers[0].id;
+          this.currentTitle = response.data.title;
+          this.currentPrice = response.data.price;
         })
         .catch(() => {
           this.productLoadingFailed = false;
@@ -239,6 +256,27 @@ export default {
         .then(() => {
           this.productLoading = false;
         });
+    },
+    isColorChecked(id) {
+      if (id === this.currentColorId) {
+        return true;
+      }
+      return false;
+    },
+    isOfferChecked(id) {
+      if (id === this.currentOfferPropId) {
+        return true;
+      }
+      return false;
+    },
+    chooseOffer(id) {
+      const offer = this.productData.offers.find((p) => p.id === id);
+      this.currentOfferPropId = id;
+      this.currentTitle = offer.title;
+      this.currentPrice = offer.price;
+    },
+    chooseColor(id) {
+      this.currentColorId = id;
     },
   },
   watch: {

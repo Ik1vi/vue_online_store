@@ -23,7 +23,7 @@ const store = new Vuex.Store({
     },
     syncCartProducts(state) {
       state.cartProducts = state.cartProductsData.map((item) => ({
-        productId: item.product.id,
+        productId: item.id,
         amount: item.quantity,
       }));
     },
@@ -117,12 +117,13 @@ const store = new Vuex.Store({
           context.commit('updateCartDataLoading', false);
         });
     },
-    addProductToCart(context, { productId, amount }) {
+    addProductToCart(context, { productOfferId, colorId, quantity }) {
       context.commit('updateCartDataLoading', true);
       return axios
         .post(`${API_BASE_URL}/api/baskets/products`, {
-          productId,
-          quantity: amount,
+          productOfferId,
+          colorId,
+          quantity,
         }, {
           params: {
             userAccessKey: context.state.userAccessKey,
