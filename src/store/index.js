@@ -40,25 +40,26 @@ const store = new Vuex.Store({
   },
   getters: {
     cartDetailProducts(state) {
-      return state.cartProducts.map((item) => {
-        const { product } = state.cartProductsData.find((p) => p.product.id === item.productId);
-        return {
-          ...item,
-          product: {
-            ...product,
-            image: product.image.file.url,
-          },
-        };
-      });
+      return state.cartProductsData.map((item) => ({
+        id: item.id,
+        productId: item.productOffer.product.id,
+        price: item.price,
+        quantity: item.quantity,
+        title: item.productOffer.title,
+        colorTitle: item.color.color.title,
+        propValue: item.productOffer.propValues[0].value,
+        propTitle: item.productOffer.product.mainProp.title,
+        image: item.productOffer.product.preview.file.url,
+      }));
     },
     cartTotalPrice(state, getters) {
       return getters.cartDetailProducts.reduce(
-        (acc, item) => acc + (item.product.price * item.amount), 0,
+        (acc, item) => acc + (item.price * item.quantity), 0,
       );
     },
-    cartTotalProductsCount(state) {
-      return state.cartProducts.reduce(
-        (acc, item) => acc + item.amount, 0,
+    cartTotalProductsCount(state, getters) {
+      return getters.cartDetailProducts.reduce(
+        (acc, item) => acc + item.quantity, 0,
       );
     },
     cartTotalProductText(state, getters) {
@@ -152,12 +153,12 @@ const store = new Vuex.Store({
           context.commit('syncCartProducts');
         });
     },
-    deleteCartProduct(context, { productId }) {
+    deleteCartProduct(context, { basketItemId }) {
       context.commit('updateCartDataLoading', true);
       return axios
         .delete(`${API_BASE_URL}/api/baskets/products`, {
           data: {
-            productId,
+            basketItemId,
           },
           params: {
             userAccessKey: context.state.userAccessKey,
