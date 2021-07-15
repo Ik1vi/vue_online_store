@@ -96,8 +96,8 @@
                   <input
                     class="check-list__check sr-only"
                     type="checkbox"
-                    name="volume"
-                    :value="value.value"
+                    :name="prop.title"
+                    :value="`${prop.title}: ${value.value}`"
                     v-model="checkedProps"
                   >
                   <span class="check-list__desc">
@@ -173,6 +173,7 @@ export default {
     },
     currentCategoryId(value) {
       this.loadCategory(value);
+      this.checkedProps = [];
     },
     colorId(value) {
       this.currentColorId = value;
