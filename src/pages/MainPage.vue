@@ -60,7 +60,10 @@ export default {
       filterPriceTo: 100000,
       filterCategoryId: 0,
       filterColorId: 0,
-      filterProps: [],
+      filterOfferPropCode: '',
+      filterOfferPropValue: '',
+      // filterProps: 'props[built_in_memory][]=32GB',
+
       maxPrice: 0,
 
       page: 1,
@@ -75,6 +78,9 @@ export default {
   },
 
   computed: {
+    filterProps() {
+      return 'props[built_in_memory][]=32GB';
+    },
     productsAll() {
       return this.productsDataAll ? this.productsDataAll : [];
     },
@@ -96,14 +102,16 @@ export default {
       this.productsLoadingFailed = false;
       clearTimeout(this.loadProductsTimer);
 
+      // let props = [];
+      // for prop
       this.loadProductsTimer = setTimeout(() => {
         axios
           .get(`${API_BASE_URL}/api/products`, {
+          // .get(`${API_BASE_URL}/api/products?${this.filterProps}`, {
             params: {
               page: this.page,
               limit: this.productsPerPage,
               categoryId: this.filterCategoryId,
-              props: [],
               minPrice: this.filterPriceFrom,
               maxPrice: this.filterPriceTo,
             },

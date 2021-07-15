@@ -23,18 +23,18 @@
     <ul class="colors colors--black">
       <li
         v-for="color in colors"
-        :key="color.id"
+        :key="color.color.id"
         class="colors__item"
       >
         <label class="colors__label">
           <input
             class="colors__radio sr-only"
             type="radio"
-            :value="color.title"
+            :value="color.color.title"
           >
           <span
             class="colors__value"
-            :style="{'background-color': color.code}"
+            :style="{'background-color': color.color.code}"
           />
         </label>
       </li>

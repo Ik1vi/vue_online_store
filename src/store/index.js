@@ -43,10 +43,12 @@ const store = new Vuex.Store({
       return state.cartProductsData.map((item) => ({
         id: item.id,
         productId: item.productOffer.product.id,
+        productOfferId: item.productOffer.id,
         price: item.price,
         quantity: item.quantity,
         title: item.productOffer.title,
         colorTitle: item.color.color.title,
+        colorId: item.color.color.id,
         propValue: item.productOffer.propValues[0].value,
         propTitle: item.productOffer.product.mainProp.title,
         image: item.productOffer.product.preview.file.url,
@@ -138,11 +140,11 @@ const store = new Vuex.Store({
           context.commit('updateCartDataLoading', false);
         });
     },
-    updateCartProductAmount(context, { productId, amount }) {
+    updateCartProductAmount(context, { basketItemId, quantity }) {
       return axios
         .put(`${API_BASE_URL}/api/baskets/products`, {
-          productId,
-          quantity: amount,
+          basketItemId,
+          quantity,
         }, {
           params: {
             userAccessKey: context.state.userAccessKey,

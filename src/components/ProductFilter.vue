@@ -84,98 +84,32 @@
         </ul>
       </fieldset>
 
-      <fieldset class="form__block">
-        <legend class="form__legend">
-          Объемб в ГБ
-        </legend>
-        <ul class="check-list">
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input
-                class="check-list__check sr-only"
-                type="checkbox"
-                name="volume"
-                value="8"
-                checked=""
-              >
-              <span class="check-list__desc">
-                8
-                <span>(313)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input
-                class="check-list__check sr-only"
-                type="checkbox"
-                name="volume"
-                value="16"
-              >
-              <span class="check-list__desc">
-                16
-                <span>(461)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input
-                class="check-list__check sr-only"
-                type="checkbox"
-                name="volume"
-                value="32"
-              >
-              <span class="check-list__desc">
-                32
-                <span>(313)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input
-                class="check-list__check sr-only"
-                type="checkbox"
-                name="volume"
-                value="64"
-              >
-              <span class="check-list__desc">
-                64
-                <span>(313)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input
-                class="check-list__check sr-only"
-                type="checkbox"
-                name="volume"
-                value="128"
-              >
-              <span class="check-list__desc">
-                128
-                <span>(313)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input
-                class="check-list__check sr-only"
-                type="checkbox"
-                name="volume"
-                value="264"
-              >
-              <span class="check-list__desc">
-                264
-                <span>(313)</span>
-              </span>
-            </label>
-          </li>
-        </ul>
-      </fieldset>
+      <ul v-show="currentCategoryId>0">
+        <li v-for="prop in productProps" :key="prop.id">
+          <fieldset class="form__block">
+            <legend class="form__legend">
+              {{prop.title}}
+            </legend>
+            <ul class="check-list">
+              <li class="check-list__item" v-for="value in prop.availableValues" :key="value.value">
+                <label class="check-list__label">
+                  <input
+                    class="check-list__check sr-only"
+                    type="checkbox"
+                    name="volume"
+                    :value="value.value"
+                    v-model="checkedProps"
+                  >
+                  <span class="check-list__desc">
+                    {{value.value}}
+                    <span>( {{value.productsCount}} )</span>
+                  </span>
+                </label>
+              </li>
+            </ul>
+          </fieldset>
+        </li>
+      </ul>
 
       <button
         class="filter__submit button button--primery"
@@ -208,8 +142,10 @@ export default {
       currentPriceTo: this.maxPrice,
       currentCategoryId: 0,
       currentColorId: 0,
+      checkedProps: [],
 
       categoriesData: null,
+      currentCategoryData: null,
       colorsData: null,
     };
   },
@@ -219,6 +155,9 @@ export default {
     },
     colors() {
       return this.colorsData ? this.colorsData.items : [];
+    },
+    productProps() {
+      return this.currentCategoryData ? this.currentCategoryData.productProps : [];
     },
   },
   watch: {
@@ -230,6 +169,10 @@ export default {
     },
     categoryId(value) {
       this.currentCategoryId = value;
+      this.loadCategory(value);
+    },
+    currentCategoryId(value) {
+      this.loadCategory(value);
     },
     colorId(value) {
       this.currentColorId = value;
@@ -259,7 +202,13 @@ export default {
           this.categoriesData = response.data;
         });
     },
-
+    loadCategory(id) {
+      return axios
+        .get(`${API_BASE_URL}/api/productCategories/${id}`)
+        .then((response) => {
+          this.currentCategoryData = response.data;
+        });
+    },
     loadColors() {
       return axios.get(`${API_BASE_URL}/api/colors`)
         .then((response) => {
