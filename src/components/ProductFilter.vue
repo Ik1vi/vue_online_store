@@ -57,14 +57,14 @@
         </label>
       </fieldset>
 
-      <fieldset class="form__block">
+      <fieldset class="form__block" v-show="currentCategoryId>0 && categoryColors">
         <legend class="form__legend">
           Цвет
         </legend>
         <ul class="colors">
           <li
-            v-for="color in colors"
-            :key="color.id"
+            v-for="color in categoryColors"
+            :key="color.color.id"
             class="colors__item"
           >
             <label class="colors__label">
@@ -73,11 +73,11 @@
                 class="colors__radio sr-only"
                 type="radio"
                 name="color"
-                :value="color.id"
+                :value="color.color.id"
               >
               <span
                 class="colors__value"
-                :style="{'background-color': color.code}"
+                :style="{'background-color': color.color.code}"
               />
             </label>
           </li>
@@ -85,7 +85,7 @@
       </fieldset>
 
       <ul v-show="currentCategoryId>0">
-        <li v-for="prop in productProps" :key="prop.id">
+        <li v-for="prop in productProps" :key="prop.id" v-show="prop.id !== 7">
           <fieldset class="form__block">
             <legend class="form__legend">
               {{prop.title}}
@@ -145,6 +145,7 @@ export default {
       currentCheckedProps: [],
       currentPropsString: '',
 
+      categoryColors: null,
       categoriesData: null,
       currentCategoryData: null,
       colorsData: null,
@@ -170,15 +171,13 @@ export default {
     },
     categoryId(value) {
       this.currentCategoryId = value;
-      if (value > 0) {
-        this.loadCategory(value);
-      }
     },
     currentCategoryId(value) {
       if (value > 0) {
         this.loadCategory(value);
       }
       this.currentCheckedProps = [];
+      this.loadCategoryColors();
     },
     colorId(value) {
       this.currentColorId = value;
@@ -188,9 +187,6 @@ export default {
     },
     currentCheckedProps() {
       this.currentPropsString = this.filterPropsString();
-    },
-    filterProps(value) {
-      this.currentPropsString = value;
     },
   },
   methods: {
@@ -209,6 +205,26 @@ export default {
       this.$emit('update:colorId', 0);
       this.$emit('update:filterProps', '');
       this.currentCheckedProps = [];
+    },
+    loadCategoryColors() {
+      return axios
+        .get(`${API_BASE_URL}/api/products`, {
+          params: {
+            categoryId: this.currentCategoryId,
+          },
+        })
+        .then((response) => {
+          const colorsListAll = [];
+          response.data.items.map((item) => item.colors.map((color) => colorsListAll.push(color)));
+          function colorList() {
+            const seen = new Set();
+            return colorsListAll.filter((item) => {
+              const key = item.color.id;
+              return seen.has(key) ? false : seen.add(key);
+            });
+          }
+          this.categoryColors = colorList();
+        });
     },
     loadCategories() {
       return axios
