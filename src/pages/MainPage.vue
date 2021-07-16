@@ -14,6 +14,7 @@
         :category-id.sync="filterCategoryId"
         :color-id.sync="filterColorId"
         :max-price.sync="maxPrice"
+        :filter-props.sync="filterProps"
       />
 
       <section class="catalog">
@@ -60,10 +61,9 @@ export default {
       filterPriceTo: 100000,
       filterCategoryId: 0,
       filterColorId: 0,
-      filterOfferPropCode: '',
-      filterOfferPropValue: '',
-      // filterProps: 'props[built_in_memory][]=32GB',
+      filterProps: '',
 
+      checkedProps: [],
       maxPrice: 0,
 
       page: 1,
@@ -78,9 +78,6 @@ export default {
   },
 
   computed: {
-    filterProps() {
-      return 'props[built_in_memory][]=32GB';
-    },
     productsAll() {
       return this.productsDataAll ? this.productsDataAll : [];
     },
@@ -102,12 +99,9 @@ export default {
       this.productsLoadingFailed = false;
       clearTimeout(this.loadProductsTimer);
 
-      // let props = [];
-      // for prop
       this.loadProductsTimer = setTimeout(() => {
         axios
-          .get(`${API_BASE_URL}/api/products`, {
-          // .get(`${API_BASE_URL}/api/products?${this.filterProps}`, {
+          .get(`${API_BASE_URL}/api/products?${this.filterProps}`, {
             params: {
               page: this.page,
               limit: this.productsPerPage,
@@ -155,6 +149,9 @@ export default {
       this.loadProducts();
     },
     filterColorId() {
+      this.loadProducts();
+    },
+    filterProps() {
       this.loadProducts();
     },
   },

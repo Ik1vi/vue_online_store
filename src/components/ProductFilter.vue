@@ -97,8 +97,8 @@
                     class="check-list__check sr-only"
                     type="checkbox"
                     :name="prop.title"
-                    :value="`${prop.title}: ${value.value}`"
-                    v-model="checkedProps"
+                    :value="[prop.code,value.value]"
+                    v-model="currentCheckedProps"
                   >
                   <span class="check-list__desc">
                     {{value.value}}
@@ -135,14 +135,15 @@ import API_BASE_URL from '@/config';
 import numberFormat from '@/helpers/numberFormat';
 
 export default {
-  props: ['priceFrom', 'priceTo', 'categoryId', 'colorId', 'maxPrice'],
+  props: ['priceFrom', 'priceTo', 'categoryId', 'colorId', 'maxPrice', 'filterProps'],
   data() {
     return {
       currentPriceFrom: 1,
       currentPriceTo: this.maxPrice,
       currentCategoryId: 0,
       currentColorId: 0,
-      checkedProps: [],
+      currentCheckedProps: [],
+      currentPropsString: '',
 
       categoriesData: null,
       currentCategoryData: null,
@@ -169,17 +170,27 @@ export default {
     },
     categoryId(value) {
       this.currentCategoryId = value;
-      this.loadCategory(value);
+      if (value > 0) {
+        this.loadCategory(value);
+      }
     },
     currentCategoryId(value) {
-      this.loadCategory(value);
-      this.checkedProps = [];
+      if (value > 0) {
+        this.loadCategory(value);
+      }
+      this.currentCheckedProps = [];
     },
     colorId(value) {
       this.currentColorId = value;
     },
     maxPrice(value) {
       this.currentPriceTo = value;
+    },
+    currentCheckedProps() {
+      this.currentPropsString = this.filterPropsString();
+    },
+    filterProps(value) {
+      this.currentPropsString = value;
     },
   },
   methods: {
@@ -189,12 +200,15 @@ export default {
       this.$emit('update:priceTo', this.currentPriceTo);
       this.$emit('update:categoryId', this.currentCategoryId);
       this.$emit('update:colorId', this.currentColorId);
+      this.$emit('update:filterProps', this.currentPropsString);
     },
     reset() {
-      this.$emit('update:priceFrom', 0);
+      this.$emit('update:priceFrom', 1);
       this.$emit('update:priceTo', this.maxPrice);
       this.$emit('update:categoryId', 0);
       this.$emit('update:colorId', 0);
+      this.$emit('update:filterProps', '');
+      this.currentCheckedProps = [];
     },
     loadCategories() {
       return axios
@@ -215,6 +229,10 @@ export default {
         .then((response) => {
           this.colorsData = response.data;
         });
+    },
+    filterPropsString() {
+      return this.currentCheckedProps.reduce((acc, cur) => (
+        `${acc}&props[${cur[0]}][]=${cur[1]}`), '');
     },
   },
   created() {
