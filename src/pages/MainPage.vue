@@ -28,13 +28,38 @@
           </button>
         </div>
 
+        <div v-show="!products || products.length == 0">
+          К сожалению, нет ни одного товара по заданным фильтрам
+        </div>
+
         <ProductList :products="products" />
 
         <BasePagination
           v-model="page"
           :count="countProducts"
           :per-page="productsPerPage"
+          v-show="products && products.length > 0"
         />
+        <fieldset
+          class="form__block"
+          v-show="products && products.length > 0"
+        >
+          <legend class="form__legend">
+            Товаров на странице:
+          </legend>
+          <label class="form__label form__label--select">
+            <select
+              v-model.number="productsPerPage"
+              class="form__select"
+              type="text"
+              name="productsPerPage"
+            >
+              <option>9</option>
+              <option>18</option>
+              <option>27</option>
+            </select>
+          </label>
+        </fieldset>
       </section>
     </div>
   </main>
@@ -162,6 +187,10 @@ export default {
   watch: {
     page() {
       this.loadProducts();
+    },
+    productsPerPage() {
+      this.loadProducts();
+      this.page = 1;
     },
     productsDataAll() {
       this.findMaxPrice();

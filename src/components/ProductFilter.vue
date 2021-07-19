@@ -147,7 +147,7 @@ export default {
       currentCheckedColors: [],
       currentPropsString: '',
 
-      categoryColors: null,
+      categoryColors: [],
       categoriesData: null,
       currentCategoryData: null,
       colorsData: null,
@@ -202,8 +202,10 @@ export default {
       this.$emit('update:categoryId', 0);
       this.$emit('update:filterProps', '');
       this.$emit('update:page', 1);
+      this.$emit('update:colorsList', []);
       this.currentCheckedProps = [];
       this.currentCheckedColors = [];
+      this.categoryColors = [];
     },
     loadCategoryColors() {
       return axios
