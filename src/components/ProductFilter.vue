@@ -57,7 +57,7 @@
         </label>
       </fieldset>
 
-      <fieldset class="form__block" v-show="currentCategoryId>0 && categoryColors">
+      <fieldset class="form__block" v-show="currentCategoryId > 0 && categoryColors.length > 0">
         <legend class="form__legend">
           Цвет
         </legend>
@@ -71,9 +71,10 @@
               <input
                 v-model.number="currentColorId"
                 class="colors__radio sr-only"
-                type="radio"
+                type="checkbox"
                 name="color"
                 :value="color.color.id"
+                v-model="currentCheckedColors"
               >
               <span
                 class="colors__value"
@@ -135,7 +136,7 @@ import API_BASE_URL from '@/config';
 import numberFormat from '@/helpers/numberFormat';
 
 export default {
-  props: ['priceFrom', 'priceTo', 'categoryId', 'colorId', 'maxPrice', 'filterProps'],
+  props: ['priceFrom', 'priceTo', 'categoryId', 'maxPrice', 'filterProps', 'colorsList', 'page'],
   data() {
     return {
       currentPriceFrom: 1,
@@ -143,6 +144,7 @@ export default {
       currentCategoryId: 0,
       currentColorId: 0,
       currentCheckedProps: [],
+      currentCheckedColors: [],
       currentPropsString: '',
 
       categoryColors: null,
@@ -154,9 +156,6 @@ export default {
   computed: {
     categories() {
       return this.categoriesData ? this.categoriesData.items : [];
-    },
-    colors() {
-      return this.colorsData ? this.colorsData.items : [];
     },
     productProps() {
       return this.currentCategoryData ? this.currentCategoryData.productProps : [];
@@ -177,10 +176,8 @@ export default {
         this.loadCategory(value);
       }
       this.currentCheckedProps = [];
+      this.currentCheckedColors = [];
       this.loadCategoryColors();
-    },
-    colorId(value) {
-      this.currentColorId = value;
     },
     maxPrice(value) {
       this.currentPriceTo = value;
@@ -195,16 +192,18 @@ export default {
       this.$emit('update:priceFrom', this.currentPriceFrom);
       this.$emit('update:priceTo', this.currentPriceTo);
       this.$emit('update:categoryId', this.currentCategoryId);
-      this.$emit('update:colorId', this.currentColorId);
       this.$emit('update:filterProps', this.currentPropsString);
+      this.$emit('update:colorsList', this.currentCheckedColors);
+      this.$emit('update:page', 1);
     },
     reset() {
       this.$emit('update:priceFrom', 1);
       this.$emit('update:priceTo', this.maxPrice);
       this.$emit('update:categoryId', 0);
-      this.$emit('update:colorId', 0);
       this.$emit('update:filterProps', '');
+      this.$emit('update:page', 1);
       this.currentCheckedProps = [];
+      this.currentCheckedColors = [];
     },
     loadCategoryColors() {
       return axios
@@ -240,12 +239,6 @@ export default {
           this.currentCategoryData = response.data;
         });
     },
-    loadColors() {
-      return axios.get(`${API_BASE_URL}/api/colors`)
-        .then((response) => {
-          this.colorsData = response.data;
-        });
-    },
     filterPropsString() {
       return this.currentCheckedProps.reduce((acc, cur) => (
         `${acc}&props[${cur[0]}][]=${cur[1]}`), '');
@@ -253,7 +246,6 @@ export default {
   },
   created() {
     this.loadCategories();
-    this.loadColors();
   },
 };
 </script>

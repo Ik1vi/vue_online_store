@@ -12,9 +12,10 @@
         :price-from.sync="filterPriceFrom"
         :price-to.sync="filterPriceTo"
         :category-id.sync="filterCategoryId"
-        :color-id.sync="filterColorId"
         :max-price.sync="maxPrice"
         :filter-props.sync="filterProps"
+        :colors-list.sync="filterColorsList"
+        :page.sync="page"
       />
 
       <section class="catalog">
@@ -60,14 +61,14 @@ export default {
       filterPriceFrom: 1,
       filterPriceTo: 100000,
       filterCategoryId: 0,
-      filterColorId: 0,
       filterProps: '',
 
+      filterColorsList: [],
       checkedProps: [],
       maxPrice: 0,
 
       page: 1,
-      productsPerPage: 3,
+      productsPerPage: 9,
 
       productsData: null,
       productsDataAll: 0,
@@ -111,7 +112,33 @@ export default {
             },
           })
           .then((response) => {
-            this.productsData = response.data;
+            const responseData = response.data;
+            const productsFiltered = [];
+
+            if (this.filterColorsList.length > 0) {
+              responseData.items.map((item) => item.colors.map((color) => {
+                if (this.filterColorsList.includes(color.color.id)) {
+                  productsFiltered.push(item);
+                }
+                return productsFiltered;
+              }));
+
+              const seen = new Set();
+              const productItems = productsFiltered.filter((product) => {
+                const key = product.id;
+                return seen.has(key) ? false : seen.add(key);
+              });
+
+              responseData.items = productItems;
+              responseData.pagination.total = productItems.length;
+              if (productItems.length > this.productsPerPage) {
+                responseData.pagination.pages = Math.floor(productItems.length / this.limit);
+              } else responseData.pagination.pages = 1;
+
+              this.productsData = responseData;
+            } else {
+              this.productsData = response.data;
+            }
             this.productsLoading = false;
           })
           .catch(() => {
@@ -148,10 +175,10 @@ export default {
     filterCategoryId() {
       this.loadProducts();
     },
-    filterColorId() {
+    filterProps() {
       this.loadProducts();
     },
-    filterProps() {
+    filterColorsList() {
       this.loadProducts();
     },
   },
