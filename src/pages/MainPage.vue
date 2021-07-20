@@ -16,6 +16,7 @@
         :filter-props.sync="filterProps"
         :colors-list.sync="filterColorsList"
         :page.sync="page"
+        :is-filters.sync="isFilters"
       />
 
       <section class="catalog">
@@ -84,13 +85,14 @@ export default {
   data() {
     return {
       filterPriceFrom: 1,
-      filterPriceTo: 100000,
+      filterPriceTo: 500000,
       filterCategoryId: 0,
       filterProps: '',
 
       filterColorsList: [],
       checkedProps: [],
-      maxPrice: 0,
+      maxPrice: 1,
+      isFilters: false,
 
       page: 1,
       productsPerPage: 9,
@@ -183,6 +185,14 @@ export default {
       this.maxPrice = maxDataPrice;
       return maxDataPrice;
     },
+    filterCheck() {
+      // eslint-disable-next-line max-len
+      if (this.filterPriceFrom > 1 || this.filterPriceTo < this.maxPrice || this.filterCategoryId > 0) {
+        this.isFilters = true;
+      } else {
+        this.isFilters = false;
+      }
+    },
   },
   watch: {
     page() {
@@ -197,18 +207,24 @@ export default {
     },
     filterPriceFrom() {
       this.loadProducts();
+      this.filterCheck();
     },
     filterPriceTo() {
       this.loadProducts();
+      this.filterCheck();
     },
     filterCategoryId() {
       this.loadProducts();
+      this.filterCheck();
     },
     filterProps() {
       this.loadProducts();
     },
     filterColorsList() {
       this.loadProducts();
+    },
+    maxPrice(value) {
+      this.filterPriceTo = value;
     },
   },
   created() {

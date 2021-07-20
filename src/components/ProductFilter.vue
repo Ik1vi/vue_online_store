@@ -122,6 +122,7 @@
         class="filter__reset button button--second"
         type="button"
         @click.prevent="reset"
+        v-show="isFilters"
       >
         Сбросить
       </button>
@@ -136,7 +137,7 @@ import API_BASE_URL from '@/config';
 import numberFormat from '@/helpers/numberFormat';
 
 export default {
-  props: ['priceFrom', 'priceTo', 'categoryId', 'maxPrice', 'filterProps', 'colorsList', 'page'],
+  props: ['priceFrom', 'priceTo', 'categoryId', 'maxPrice', 'filterProps', 'colorsList', 'page', 'isFilters'],
   data() {
     return {
       currentPriceFrom: 1,
@@ -203,6 +204,7 @@ export default {
       this.$emit('update:filterProps', '');
       this.$emit('update:page', 1);
       this.$emit('update:colorsList', []);
+      this.$emit('update:thisFilters', false);
       this.currentCheckedProps = [];
       this.currentCheckedColors = [];
       this.categoryColors = [];
