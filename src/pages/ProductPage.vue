@@ -105,7 +105,7 @@
                   class="button button--primery"
                   type="submit"
                   :disabled="productAddSending">
-                    В корзину
+                    {{currentBtnText}}
                 </button>
               </div>
               <div v-show="productAdded">Товар добавлен в корзину</div>
@@ -116,58 +116,46 @@
 
         <div class="item__desc">
           <ul class="tabs">
-            <li class="tabs__item">
-              <a class="tabs__link tabs__link--current"> Описание </a>
-            </li>
-            <li class="tabs__item">
-              <a class="tabs__link" href="#"> Характеристики </a>
-            </li>
-            <li class="tabs__item">
-              <a class="tabs__link" href="#"> Гарантия </a>
-            </li>
-            <li class="tabs__item">
-              <a class="tabs__link" href="#"> Оплата и доставка </a>
-            </li>
+            <ProductItemTabItem
+              :content="'content'"
+              :tab-title="'Описание'"
+              :content-data.sync='currentContent'
+            />
+            <ProductItemTabItem
+              :content="'specifications'"
+              :tab-title="'Характеристики'"
+              :content-data.sync='currentContent'
+            />
+            <ProductItemTabItem
+              :content="'guarantee'"
+              :tab-title="'Гарантия'"
+              :content-data.sync='currentContent'
+            />
+            <ProductItemTabItem
+              :content="'delivery'"
+              :tab-title="'Оплата и доставка'"
+              :content-data.sync='currentContent'
+            />
           </ul>
 
-          <div class="item__content">
+          <div class="item__content" v-show="currentContent === 'content'">
+            <h3>Описание товара:</h3>
             <p>
-              Навигация GPS, ГЛОНАСС, BEIDOU Galileo и QZSS<br />
-              Синхронизация со смартфоном<br />
-              Связь по Bluetooth Smart, ANT+ и Wi-Fi<br />
-              Поддержка сторонних приложений<br />
+              {{product.content}}
             </p>
-
-            <a href="#"> Все характеристики </a>
-
-            <h3>Что это?</h3>
-
-            <p>
-              Wahoo ELEMNT BOLT GPS – это велокомпьютер, который позволяет оптимизировать свои
-              велотренировки, сделав их максимально эффективными. Wahoo ELEMNT BOLT GPS
-              синхронизируется с датчиками по ANT+, объединяя полученную с них информацию. Данные
-              отображаются на дисплее, а также сохраняются на смартфоне. При этом на мобильное
-              устройство можно установить как фирменное приложение, так и различные приложения
-              сторонних разработчиков. Велокомпьютер точно отслеживает
-              местоположение, принимая сигнал
-              с целого комплекса спутников. Эта информация позволяет смотреть уже преодоленные
-              маршруты и планировать новые велопрогулки.
-            </p>
-
-            <h3>Дизайн</h3>
-
-            <p>
-              Велокомпьютер Wahoo ELEMNT BOLT очень компактный. Размеры устройства составляют всего
-              74,6 x 47,3 x 22,1 мм. что не превышает габариты смартфона. Корпус гаджета выполнен из
-              черного пластика. На обращенной к пользователю стороне
-              расположен дисплей диагональю 56
-              мм. На дисплей выводятся координаты и скорость, а также полученная со смартфона и
-              синхронизированных датчиков информация: интенсивность,
-              скорость вращения педалей, пульс
-              и т.д. (датчики не входят в комплект поставки). Корпус велокомпьютера имеет степень
-              защиты от влаги IPX7. Это означает, что устройство не боится пыли, а также выдерживает
-              кратковременное (до 30 минут) погружение в воду на глубину не более 1 метра.
-            </p>
+          </div>
+          <div class="item__content" v-show="currentContent === 'specifications'">
+            <h3>Характеристики товара:</h3>
+            <ul>
+              <li v-for="specification in product.specifications" :key="specification.id">
+                <h4>
+                  {{specification.title}}:
+                </h4>
+                <p>
+                  {{specification.value}}
+                </p>
+              </li>
+            </ul>
           </div>
         </div>
       </section>
@@ -184,9 +172,10 @@ import numberFormat from '@/helpers/numberFormat';
 
 import AmountCounter from '@/components/AmountCounter.vue';
 import ContentPreloader from '@/components/ContentPreloader.vue';
+import ProductItemTabItem from '@/components/ProductItemTabItem.vue';
 
 export default {
-  components: { AmountCounter, ContentPreloader },
+  components: { AmountCounter, ContentPreloader, ProductItemTabItem },
   data() {
     return {
       productAmount: 1,
@@ -202,6 +191,9 @@ export default {
       currentOfferPropId: 0,
       currentTitle: '',
       currentPrice: 0,
+      currentBtnText: 'В корзину',
+
+      currentContent: 'content',
     };
   },
   computed: {
@@ -221,6 +213,10 @@ export default {
   methods: {
     ...mapActions(['addProductToCart']),
     numberFormat,
+
+    changeContent(content) {
+      this.currentContent = content;
+    },
 
     addToCart() {
       this.productAdded = false;
@@ -285,6 +281,9 @@ export default {
         this.loadProduct();
       },
       immediate: true,
+    },
+    productAdded() {
+      this.currentBtnText = 'Товар добавлен';
     },
   },
 };

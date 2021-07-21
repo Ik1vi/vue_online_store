@@ -4,7 +4,7 @@
       <h1 class="content__title">
         Каталог
       </h1>
-      <span class="content__info"> 152 товара </span>
+      <span class="content__info"> {{productCountText}}</span>
     </div>
 
     <div class="content__catalog">
@@ -55,9 +55,9 @@
               type="text"
               name="productsPerPage"
             >
-              <option>9</option>
-              <option>18</option>
-              <option>27</option>
+              <option>12</option>
+              <option>24</option>
+              <option>32</option>
             </select>
           </label>
         </fieldset>
@@ -93,9 +93,10 @@ export default {
       checkedProps: [],
       maxPrice: 1,
       isFilters: false,
+      productCountText: '',
 
       page: 1,
-      productsPerPage: 9,
+      productsPerPage: 12,
 
       productsData: null,
       productsDataAll: 0,
@@ -193,6 +194,15 @@ export default {
         this.isFilters = false;
       }
     },
+    totalProductText() {
+      const endings = ['товар', 'товара', 'товаров'];
+      function productEnding(number) {
+        return endings[
+          (number % 100 > 4 && number % 100 < 20) ? 2
+            : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? number % 10 : 5]];
+      }
+      this.productCountText = `${this.productsData.pagination.total} ${productEnding(this.productsData.pagination.total)}`;
+    },
   },
   watch: {
     page() {
@@ -201,6 +211,9 @@ export default {
     productsPerPage() {
       this.loadProducts();
       this.page = 1;
+    },
+    productsData() {
+      this.totalProductText();
     },
     productsDataAll() {
       this.findMaxPrice();
