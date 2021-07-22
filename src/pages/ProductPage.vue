@@ -10,7 +10,10 @@
     <main class="content container" v-if="productData">
       <div class="content__top">
         <ul class="breadcrumbs">
-          <li class="breadcrumbs__item">
+          <li
+            class="breadcrumbs__item"
+            @click.prevent="updateCategoryId(0)"
+          >
             <router-link
               class="breadcrumbs__link"
               :to="{name: 'main'}"
@@ -18,7 +21,10 @@
               Каталог
             </router-link>
           </li>
-          <li class="breadcrumbs__item">
+          <li
+            class="breadcrumbs__item"
+            @click.prevent="updateCategoryId(category.id)"
+          >
             <router-link
               class="breadcrumbs__link"
               :to="{name: 'main'}"
@@ -27,7 +33,11 @@
             </router-link>
           </li>
           <li class="breadcrumbs__item">
-            <a class="breadcrumbs__link"> {{currentTitle}} </a>
+            <a
+              class="breadcrumbs__link"
+            >
+              {{currentTitle}}
+            </a>
           </li>
         </ul>
       </div>
@@ -273,6 +283,9 @@ export default {
     },
     chooseColor(id) {
       this.currentColorId = id;
+    },
+    updateCategoryId(id) {
+      this.$store.commit('updateLocalCategoryId', id);
     },
   },
   watch: {

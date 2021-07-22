@@ -121,6 +121,9 @@ export default {
     countProducts() {
       return this.productsData ? this.productsData.pagination.total : 0;
     },
+    categoryData() {
+      return this.$store.state.localCategoryId;
+    },
   },
   methods: {
     loadProducts() {
@@ -239,8 +242,12 @@ export default {
     maxPrice(value) {
       this.filterPriceTo = value;
     },
+    categoryData(value) {
+      this.filterCategoryId = value;
+    },
   },
   created() {
+    this.filterCategoryId = this.$store.state.localCategoryId;
     this.loadProducts();
     this.loadProductsAll();
   },

@@ -8,15 +8,21 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    cartProducts: [],
     userAccessKey: null,
+
+    cartProducts: [],
     cartProductsData: [],
-    cartDataLoading: false,
     orderInfo: null,
+
+    cartDataLoading: false,
+    localCategoryId: 0,
   },
   mutations: {
     updateUserAccessKey(state, accessKey) {
       state.userAccessKey = accessKey;
+    },
+    updateLocalCategoryId(state, categoryId) {
+      state.localCategoryId = categoryId;
     },
     updateCartProductsData(state, items) {
       state.cartProductsData = items;

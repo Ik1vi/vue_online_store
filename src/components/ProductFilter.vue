@@ -196,6 +196,7 @@ export default {
       this.$emit('update:filterProps', this.currentPropsString);
       this.$emit('update:colorsList', this.currentCheckedColors);
       this.$emit('update:page', 1);
+      this.$store.commit('updateLocalCategoryId', this.currentCategoryId);
     },
     reset() {
       this.$emit('update:priceFrom', 1);
@@ -208,6 +209,7 @@ export default {
       this.currentCheckedProps = [];
       this.currentCheckedColors = [];
       this.categoryColors = [];
+      this.$store.commit('updateLocalCategoryId', 0);
     },
     loadCategoryColors() {
       return axios
