@@ -80,20 +80,24 @@ const store = new Vuex.Store({
       return `${getters.cartTotalProductsCount} ${productEnding(getters.cartTotalProductsCount)}`;
     },
     orderDetailProducts(state) {
-      return state.orderInfo.basket.items.map((item) => ({
-        ...item,
-        amount: item.quantity,
-        product: {
-          ...item.product,
-          image: item.product.image.file.url,
-          productId: item.product.Id,
-        },
-      }));
+      if (state.orderInfo) {
+        return state.orderInfo.basket.items.map((item) => ({
+          ...item,
+          amount: item.quantity,
+          product: {
+            ...item.product,
+            image: item.product.image.file.url,
+            productId: item.product.Id,
+          },
+        }));
+      } return [];
     },
     orderTotalProductsCount(state) {
-      return state.orderInfo.basket.items.reduce(
-        (acc, item) => acc + item.quantity, 0,
-      );
+      if (state.orderInfo) {
+        return state.orderInfo.basket.items.reduce(
+          (acc, item) => acc + item.quantity, 0,
+        );
+      } return 0;
     },
     orderTotalProductText(state, getters) {
       const endings = ['товар', 'товара', 'товаров'];
@@ -102,7 +106,9 @@ const store = new Vuex.Store({
           (number % 100 > 4 && number % 100 < 20) ? 2
             : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? number % 10 : 5]];
       }
-      return `${getters.orderTotalProductsCount} ${productEnding(getters.orderTotalProductsCount)}`;
+      if (state.orderInfo) {
+        return `${getters.orderTotalProductsCount} ${productEnding(getters.orderTotalProductsCount)}`;
+      } return '';
     },
   },
   actions: {

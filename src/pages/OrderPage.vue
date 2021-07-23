@@ -70,25 +70,21 @@
           <div class="cart__options">
             <h3 class="cart__title">Доставка</h3>
             <ul class="cart__options options">
-              <li class="options__item">
+              <li class="options__item" v-for="delivery in deliveryData" :key="delivery.id">
                 <label class="options__label">
                   <input
                     class="options__radio sr-only"
                     type="radio"
                     name="delivery"
-                    value="0"
-                    checked=""
+                    :value="delivery.id"
+                    v-model="deliveryTypeId"
+                    @click="currentDeliveryPrice = Number(delivery.price)"
                   >
                   <span class="options__value">
-                    Самовывоз <b>бесплатно</b>
-                  </span>
-                </label>
-              </li>
-              <li class="options__item">
-                <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="delivery" value="500">
-                  <span class="options__value">
-                    Курьером <b>500 ₽</b>
+                    {{delivery.title}}
+                    <b>
+                      {{delivery.id == 1 ? ' бесплатно': ` ${delivery.price} ₽`}}
+                    </b>
                   </span>
                 </label>
               </li>
@@ -96,19 +92,17 @@
 
             <h3 class="cart__title">Оплата</h3>
             <ul class="cart__options options">
-              <li class="options__item">
+              <li class="options__item" v-for="payment in paymentData" :key="payment.id">
                 <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="pay" value="card">
+                  <input
+                    class="options__radio sr-only"
+                    type="radio"
+                    name="pay"
+                    :value="payment.id"
+                    v-model="paymentId"
+                  >
                   <span class="options__value">
-                    Картой при получении
-                  </span>
-                </label>
-              </li>
-              <li class="options__item">
-                <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="pay" value="cash">
-                  <span class="options__value">
-                    Наличными при получении
+                    {{payment.title}}
                   </span>
                 </label>
               </li>
@@ -118,8 +112,9 @@
 
         <OrderCartBlock
           :products="products"
-          :totalPrice="totalPrice"
-          :totalProductsCount="totalProductsCount"
+          :total-price="totalPrice"
+          :total-products-count="totalProductsCount"
+          :current-delivery-price="currentDeliveryPrice"
         >
           <button class="cart__button button button--primery" type="submit">
             Оформить заказ
@@ -156,8 +151,15 @@ export default {
       formData: {},
       formError: {},
       formErrorMessage: '',
+
       orderAdded: false,
       orderSending: false,
+
+      deliveryData: [],
+      deliveryTypeId: 1,
+      paymentData: [],
+      paymentId: 0,
+      currentDeliveryPrice: 0,
     };
   },
   components: { BaseFormText, BaseFormTextarea, OrderCartBlock },
@@ -172,6 +174,8 @@ export default {
       return axios
         .post(`${API_BASE_URL}/api/orders`, {
           ...this.formData,
+          deliveryTypeId: this.deliveryTypeId,
+          paymentTypeId: this.paymentId,
         },
         {
           params: {
@@ -193,6 +197,23 @@ export default {
           this.formErrorMessage = error.response.data.error.message || '';
         });
     },
+    loadDeliveries() {
+      return axios.get(`${API_BASE_URL}/api/deliveries`)
+        .then((response) => {
+          this.deliveryData = response.data;
+        });
+    },
+    loadPayments() {
+      this.paymentId = 0;
+      return axios.get(`${API_BASE_URL}/api/payments`, {
+        params: {
+          deliveryTypeId: this.deliveryTypeId,
+        },
+      })
+        .then((response) => {
+          this.paymentData = response.data;
+        });
+    },
   },
   computed: {
     ...mapGetters({
@@ -200,6 +221,15 @@ export default {
       totalPrice: 'cartTotalPrice',
       totalProductsCount: 'cartTotalProductText',
     }),
+  },
+  watch: {
+    deliveryTypeId() {
+      this.loadPayments();
+    },
+  },
+  created() {
+    this.loadDeliveries();
+    this.loadPayments();
   },
 };
 </script>
