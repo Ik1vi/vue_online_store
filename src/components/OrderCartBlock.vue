@@ -7,7 +7,7 @@
           <div class="cart__total">
             <p>Доставка: <b>{{currentDeliveryPrice}} ₽</b></p>
             <p>Итого: {{ totalProductsCount }} на сумму <b>
-              {{ numberFormat(totalPrice + currentDeliveryPrice) }} ₽</b>
+              {{ numberFormat(totalPrice + Number(currentDeliveryPrice)) }} ₽</b>
             </p>
           </div>
 

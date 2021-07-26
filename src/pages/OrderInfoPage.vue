@@ -73,7 +73,7 @@
                 Способ оплаты
               </span>
               <span class="dictionary__value">
-                картой при получении
+                {{orderInfo.paymentType}}
               </span>
             </li>
           </ul>
@@ -81,8 +81,9 @@
 
         <OrderCartBlock
           :products="products"
-          :totalPrice="orderInfo.totalPrice"
-          :totalProductsCount="totalProductsCount"
+          :total-price="orderInfo.totalPrice"
+          :total-products-count="totalProductsCount"
+          :current-delivery-price="orderInfo.deliveryType.price"
         />
       </form>
     </section>

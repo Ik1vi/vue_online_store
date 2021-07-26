@@ -82,13 +82,17 @@ const store = new Vuex.Store({
     orderDetailProducts(state) {
       if (state.orderInfo) {
         return state.orderInfo.basket.items.map((item) => ({
-          ...item,
-          amount: item.quantity,
-          product: {
-            ...item.product,
-            image: item.product.image.file.url,
-            productId: item.product.Id,
-          },
+          id: item.id,
+          productId: item.productOffer.product.id,
+          productOfferId: item.productOffer.id,
+          price: item.price,
+          quantity: item.quantity,
+          title: item.productOffer.title,
+          colorTitle: item.color.color.title,
+          colorId: item.color.color.id,
+          propValue: item.productOffer.propValues[0].value,
+          propTitle: item.productOffer.product.mainProp.title,
+          image: item.productOffer.product.preview.file.url,
         }));
       } return [];
     },

@@ -137,11 +137,6 @@
               :content-data.sync='currentContent'
             />
             <ProductItemTabItem
-              :content="'guarantee'"
-              :tab-title="'Гарантия'"
-              :content-data.sync='currentContent'
-            />
-            <ProductItemTabItem
               :content="'delivery'"
               :tab-title="'Оплата и доставка'"
               :content-data.sync='currentContent'
@@ -166,6 +161,21 @@
                 </p>
               </li>
             </ul>
+          </div>
+          <div class="item__content" v-show="currentContent === 'delivery'">
+            <h3>Доставка и оплата:</h3>
+            <p>
+              Возможные варианты доставки: курьером и самовывоз.
+              От выбранного варианта доставки будет зависеть способ оплаты.
+              Способ доставки и оплаты можно выбрать при оформлении заказа.
+              Для уточнения деталей вы всегда можете обратиться к нашему менеджеру по телефону
+              <a
+                class="header__tel"
+                href="tel:8 800 600 90 09"
+              >
+                8 800 600 90 09
+              </a>
+            </p>
           </div>
         </div>
       </section>
@@ -263,6 +273,7 @@ export default {
           this.productLoading = false;
         });
     },
+
     isColorChecked(id) {
       if (id === this.currentColorId) {
         return true;
