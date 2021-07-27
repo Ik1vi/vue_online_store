@@ -118,7 +118,9 @@
                     {{currentBtnText}}
                 </button>
               </div>
-              <div v-show="productAdded">Товар добавлен в корзину</div>
+              <div v-show="isProductInCart">
+                Товар с такими характеристиками уже в корзине({{productInCartQuantity}})
+              </div>
               <div v-show="productAddSending">Добавляем товар</div>
             </form>
           </div>
@@ -184,7 +186,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import axios from 'axios';
 
 import API_BASE_URL from '@/config';
@@ -206,6 +208,8 @@ export default {
 
       productAdded: false,
       productAddSending: false,
+      isProductInCart: false,
+      productInCartQuantity: 0,
 
       currentColorId: 0,
       currentOfferPropId: 0,
@@ -229,6 +233,9 @@ export default {
     colors() {
       return this.productData.colors;
     },
+    ...mapGetters({
+      products: 'cartDetailProducts',
+    }),
   },
   methods: {
     ...mapActions(['addProductToCart']),
@@ -251,6 +258,7 @@ export default {
           this.productAdded = true;
           this.productAddSending = false;
           this.productAmount = 1;
+          this.checkCartProduct();
         });
     },
     loadProduct() {
@@ -272,6 +280,15 @@ export default {
         .then(() => {
           this.productLoading = false;
         });
+    },
+
+    checkCartProduct() {
+      // eslint-disable-next-line max-len
+      const cartProduct = this.products.find((p) => p.colorId === this.currentColorId && p.productOfferId === this.currentOfferPropId);
+      if (cartProduct) {
+        this.isProductInCart = true;
+        this.productInCartQuantity = cartProduct.quantity;
+      } else this.isProductInCart = false;
     },
 
     isColorChecked(id) {
@@ -308,7 +325,17 @@ export default {
     },
     productAdded() {
       this.currentBtnText = 'Товар добавлен';
+      this.checkCartProduct();
     },
+    currentColorId() {
+      this.checkCartProduct();
+    },
+    currentOfferPropId() {
+      this.checkCartProduct();
+    },
+  },
+  created() {
+    this.checkCartProduct();
   },
 };
 </script>

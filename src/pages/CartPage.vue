@@ -44,6 +44,12 @@
           >
             Оформить заказ
           </router-link>
+          <button
+            class="filter__reset button button--second"
+            @click.prevent="resetCart"
+          >
+            Очистить корзину
+          </button>
         </div>
       </form>
     </section>
@@ -51,7 +57,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 import numberFormat from '@/helpers/numberFormat';
 import CartItem from '@/components/CartItem.vue';
@@ -61,6 +67,12 @@ export default {
   components: { CartItem, ContentPreloader },
   methods: {
     numberFormat,
+    ...mapActions(['deleteCartProduct']),
+
+    resetCart() {
+      this.products.map((p) => this.deleteCartProduct({ basketItemId: p.id }));
+      this.$store.commit('resetCart');
+    },
   },
   computed: {
     ...mapGetters({
