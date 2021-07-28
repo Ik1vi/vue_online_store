@@ -118,10 +118,10 @@
                     {{currentBtnText}}
                 </button>
               </div>
-              <div v-show="isProductInCart">
+              <div class="item__cart-info" v-show="isProductInCart">
                 Товар с такими характеристиками уже в корзине({{productInCartQuantity}})
               </div>
-              <div v-show="productAddSending">Добавляем товар</div>
+              <div class="item__cart-info" v-show="productAddSending">Добавляем товар</div>
             </form>
           </div>
         </div>

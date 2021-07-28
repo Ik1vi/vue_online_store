@@ -45,7 +45,8 @@
             Оформить заказ
           </router-link>
           <button
-            class="filter__reset button button--second"
+            v-show="products.length > 0"
+            class="cart__reset button button--second"
             @click.prevent="resetCart"
           >
             Очистить корзину
@@ -67,11 +68,10 @@ export default {
   components: { CartItem, ContentPreloader },
   methods: {
     numberFormat,
-    ...mapActions(['deleteCartProduct']),
+    ...mapActions(['deleteCartProductsAll']),
 
     resetCart() {
-      this.products.map((p) => this.deleteCartProduct({ basketItemId: p.id }));
-      this.$store.commit('resetCart');
+      this.deleteCartProductsAll({ products: this.products });
     },
   },
   computed: {

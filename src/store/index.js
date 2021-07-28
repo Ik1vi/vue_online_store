@@ -171,6 +171,24 @@ const store = new Vuex.Store({
           context.commit('syncCartProducts');
         });
     },
+    deleteCartProductsAll(context, { products }) {
+      context.commit('updateCartDataLoading', true);
+      return Promise.all(products.map((p) => axios
+        .delete(`${API_BASE_URL}/api/baskets/products`, {
+          data: {
+            basketItemId: p.id,
+          },
+          params: {
+            userAccessKey: context.state.userAccessKey,
+          },
+        })))
+        .then(() => {
+          context.commit('resetCart');
+        })
+        .then(() => {
+          context.commit('updateCartDataLoading', false);
+        });
+    },
     deleteCartProduct(context, { basketItemId }) {
       context.commit('updateCartDataLoading', true);
       return axios

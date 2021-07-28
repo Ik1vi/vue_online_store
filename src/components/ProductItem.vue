@@ -18,27 +18,6 @@
       </router-link>
     </h3>
 
-    <span class="catalog__price">{{numberFormat(currentPrice)}} ₽</span>
-
-    <fieldset class="form__block">
-        <label class="form__label form__label--select">
-          <select
-            class="form__select"
-            type="text"
-            name="prop"
-            v-model="currentOfferPropId"
-          >
-            <option
-              v-for="offer in product.offers"
-              :key="offer.id"
-              :value="offer.id"
-            >
-              {{ offer.propValues[0].value }}
-            </option>
-          </select>
-        </label>
-      </fieldset>
-
     <ul class="colors colors--black">
       <li
         v-for="color in colors"
@@ -60,17 +39,43 @@
         </label>
       </li>
     </ul>
-    <svg
-      width="30"
-      height="21"
-      fill="black"
-      @click="addToCart"
-    >
-      <use xlink:href="#icon-cart"></use>
-    </svg>
-    <div v-show="productAddSending">Добавляем товар</div>
-    <div v-show="isProductInCart">
-      Товар с такими характеристиками уже в корзине({{productInCartQuantity}})
+
+    <fieldset class="catalog__block">
+      <label class="catalog__label catalog__label--select">
+        <select
+          class="catalog__select"
+          type="text"
+          name="prop"
+          v-model="currentOfferPropId"
+        >
+          <option
+            v-for="offer in product.offers"
+            :key="offer.id"
+            :value="offer.id"
+          >
+            {{ offer.propValues[0].value }}
+          </option>
+        </select>
+      </label>
+    </fieldset>
+
+    <div class="catalog__items">
+      <span class="catalog__price">{{numberFormat(currentPrice)}} ₽</span>
+
+      <svg
+        class="catalog__cart-icon"
+        width="30"
+        height="21"
+        fill="black"
+        @click="addToCart"
+      >
+        <use xlink:href="#icon-cart"></use>
+      </svg>
+    </div>
+
+    <div class="catalog__cart-info" v-show="productAddSending">Добавляем товар</div>
+    <div class="catalog__cart-info" v-show="isProductInCart">
+      Товар с выбранными свойствами уже в корзине ({{productInCartQuantity}})
     </div>
   </li>
 </template>
