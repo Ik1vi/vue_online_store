@@ -42,16 +42,16 @@
           v-show="products && products.length > 0"
         />
         <fieldset
-          class="form__block"
+          class="catalog__block catalog__block--per-page"
           v-show="products && products.length > 0"
         >
-          <legend class="form__legend">
-            Товаров на странице:
+          <legend class="catalog__legend catalog__legend--per-page">
+            Товаров на странице
           </legend>
-          <label class="form__label form__label--select">
+          <label class="catalog__label catalog__label--select">
             <select
               v-model.number="productsPerPage"
-              class="form__select"
+              class="catalog__select"
               type="text"
               name="productsPerPage"
             >
