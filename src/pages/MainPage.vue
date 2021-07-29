@@ -20,13 +20,6 @@
       />
 
       <section class="catalog">
-        <BasePagination
-          v-model="page"
-          :count="countProducts"
-          :per-page="productsPerPage"
-          v-show="products && products.length > 0"
-        />
-
         <ContentPreloader v-if="productsLoading" />
 
         <div v-if="productsLoadingFailed">
