@@ -1,5 +1,14 @@
 <template>
   <li class="cart__item product">
+    <h3 class="product__title">
+      <router-link
+        :to="{name: 'product', params: {id: item.productId}}"
+      >
+        {{ item.title }}
+      </router-link>
+    </h3>
+    <span class="product__code"> Артикул: {{ item.id }} </span>
+
     <div class="product__pic">
       <img
         :src="item.image"
@@ -9,20 +18,17 @@
         :alt="item.title"
       >
     </div>
-    <h3 class="product__title">
-      <router-link
-        :to="{name: 'product', params: {id: item.productId}}"
-      >
-        {{ item.title }}
-      </router-link>
-    </h3>
+
     <p class="product__info">
       {{item.propTitle}}: <span>{{item.propValue}}</span>
     </p>
-    <p class="product__info--color">
-      Цвет: <span>{{item.colorTitle}}</span>
+    <p class="product__info product__info--color">
+      Цвет: <span
+        class="color-value"
+        :style="{'background-color': item.color}"
+      />
+      <span>{{item.colorTitle}}</span>
     </p>
-    <span class="product__code"> Артикул: {{ item.id }} </span>
 
     <AmountCounter
       :product-amount.sync="amount"

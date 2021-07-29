@@ -20,6 +20,13 @@
       />
 
       <section class="catalog">
+        <BasePagination
+          v-model="page"
+          :count="countProducts"
+          :per-page="productsPerPage"
+          v-show="products && products.length > 0"
+        />
+
         <ContentPreloader v-if="productsLoading" />
 
         <div v-if="productsLoadingFailed">
@@ -33,7 +40,10 @@
           К сожалению, нет ни одного товара по заданным фильтрам
         </div>
 
-        <ProductList :products="products" />
+        <ProductList
+          :class="productsPerPageClass"
+          :products="products"
+        />
 
         <BasePagination
           v-model="page"
@@ -97,6 +107,7 @@ export default {
 
       page: 1,
       productsPerPage: 12,
+      productsPerPageClass: '',
 
       productsData: null,
       productsDataAll: 0,
@@ -206,6 +217,13 @@ export default {
       }
       this.productCountText = `${this.productsData.pagination.total} ${productEnding(this.productsData.pagination.total)}`;
     },
+    checkProductsPerPage() {
+      if (this.productsPerPage === 32) {
+        this.productsPerPageClass = 'per-page--large';
+      } else if (this.productsPerPage === 24) {
+        this.productsPerPageClass = 'per-page--average';
+      } else this.productsPerPageClass = '';
+    },
   },
   watch: {
     page() {
@@ -214,6 +232,7 @@ export default {
     productsPerPage() {
       this.loadProducts();
       this.page = 1;
+      this.checkProductsPerPage();
     },
     productsData() {
       this.totalProductText();

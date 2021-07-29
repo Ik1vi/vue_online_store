@@ -33,7 +33,7 @@
           </p>
           <p class="cart__price">
             Итого:
-            <span>{{ numberFormat(totalPrice) }} ₽</span>
+            <span>{{ numberFormat(totalPrice) }}₽</span>
           </p>
 
           <router-link
