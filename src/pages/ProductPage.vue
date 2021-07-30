@@ -283,8 +283,10 @@ export default {
     },
 
     checkCartProduct() {
-      // eslint-disable-next-line max-len
-      const cartProduct = this.products.find((p) => p.colorId === this.currentColorId && p.productOfferId === this.currentOfferPropId);
+      const cartProduct = this.products.find(
+        (p) => p.colorId === this.currentColorId
+        && p.productOfferId === this.currentOfferPropId,
+      );
       if (cartProduct) {
         this.isProductInCart = true;
         this.productInCartQuantity = cartProduct.quantity;

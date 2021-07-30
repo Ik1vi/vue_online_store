@@ -194,8 +194,11 @@ export default {
       return maxDataPrice;
     },
     filterCheck() {
-      // eslint-disable-next-line max-len
-      if (this.filterPriceFrom > 1 || this.filterPriceTo < this.maxPrice || this.filterCategoryId > 0) {
+      if (
+        this.filterPriceFrom > 1
+        || this.filterPriceTo < this.maxPrice
+        || this.filterCategoryId > 0
+      ) {
         this.isFilters = true;
       } else {
         this.isFilters = false;

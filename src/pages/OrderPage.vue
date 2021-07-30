@@ -83,7 +83,7 @@
                   <span class="options__value">
                     {{delivery.title}}
                     <b>
-                      {{delivery.id == 1 ? ' бесплатно': ` ${delivery.price} ₽`}}
+                      {{delivery.id == 1 ? ' бесплатно': ` ${delivery.price}₽`}}
                     </b>
                   </span>
                 </label>
