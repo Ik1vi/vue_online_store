@@ -29,9 +29,10 @@
           </button>
         </div>
 
-        <div v-show="!products || products.length == 0">
-          К сожалению, нет ни одного товара по заданным фильтрам
-        </div>
+        <NoContentAnimate
+          v-show="!products || products.length == 0"
+          :no-content-text="'К сожалению, нет ни одного товара по заданным фильтрам'"
+        />
 
         <ProductList
           :class="productsPerPageClass"
@@ -77,6 +78,7 @@ import BasePagination from '@/components/BasePagination.vue';
 import ProductList from '@/components/ProductList.vue';
 import ProductFilter from '@/components/ProductFilter.vue';
 import ContentPreloader from '@/components/ContentPreloader.vue';
+import NoContentAnimate from '@/components/NoContentAnimate.vue';
 
 export default {
   components: {
@@ -84,6 +86,7 @@ export default {
     ProductList,
     ProductFilter,
     ContentPreloader,
+    NoContentAnimate,
   },
   data() {
     return {

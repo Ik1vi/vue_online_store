@@ -19,9 +19,13 @@
     </div>
 
     <section class="cart">
-      <ContentPreloader v-if="!products" />
       <form class="cart__form form" action="#" method="POST">
         <div class="cart__field">
+          <NoContentAnimate
+            v-show="products.length == 0"
+            :no-content-text="'Корзина пуста...все еще...'"
+          />
+          <ContentPreloader v-if="!products" />
           <ul class="cart__list">
             <CartItem v-for="item in products" :key="item.id" :item="item" />
           </ul>
@@ -37,6 +41,7 @@
           </p>
 
           <router-link
+            :disabled="products.length == 0"
             class="cart__button button button--primery"
             tag="button"
             type="submit"
@@ -63,9 +68,10 @@ import { mapGetters, mapActions } from 'vuex';
 import numberFormat from '@/helpers/numberFormat';
 import CartItem from '@/components/CartItem.vue';
 import ContentPreloader from '@/components/ContentPreloader.vue';
+import NoContentAnimate from '@/components/NoContentAnimate.vue';
 
 export default {
-  components: { CartItem, ContentPreloader },
+  components: { CartItem, ContentPreloader, NoContentAnimate },
   methods: {
     numberFormat,
     ...mapActions('cart', {

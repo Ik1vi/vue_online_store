@@ -1530,6 +1530,37 @@ a {
         transform: translate(-40px, 0) rotate(-90deg);
     }
 }
+.no-content {
+    text-align: center;
+}
+
+.dino-pic {
+    -webkit-animation: dinoWalk 7s infinite liner;
+    animation: dinoWalk 7s infinite linear;
+}
+
+@keyframes dinoWalk {
+    0%, 100% {
+        -webkit-transform: translate(0, 0) rotateY(0);
+        transform: translate(0, 0) rotateY(0);
+    }
+    20% {
+        -webkit-transform: translate(25vw, 0) rotateY(0);
+        transform: translate(25vw, 0) rotateY(0);
+    }
+    30% {
+        -webkit-transform: translate(25vw, 0) rotateY(180deg);
+        transform: translate(25vw, 0) rotateY(180deg);
+    }
+    70% {
+        -webkit-transform: translate(-25vw, 0) rotateY(180deg);
+        transform: translate(-25vw, 0) rotateY(180deg);
+    }
+    80% {
+        -webkit-transform: translate(-25vw, 0) rotateY(0);
+        transform: translate(-25vw, 0) rotateY(0);
+    }
+}
 
 @media (max-width: 960px){
     .product {
