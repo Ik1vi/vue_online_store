@@ -57,7 +57,7 @@
 
         <div class="item__info">
           <span class="item__code">Артикул: {{product.id}}</span>
-          <h2 class="item__title">{{currentTitle}}</h2>
+          <h1 class="item__title">{{currentTitle}}</h1>
           <div class="item__form">
             <form class="form" action="#" method="POST" @submit.prevent="addToCart">
               <b class="item__price"> {{numberFormat(currentPrice)}} ₽ </b>
@@ -172,7 +172,6 @@
               Способ доставки и оплаты можно выбрать при оформлении заказа.
               Для уточнения деталей вы всегда можете обратиться к нашему менеджеру по телефону
               <a
-                class="header__tel"
                 href="tel:8 800 600 90 09"
               >
                 8 800 600 90 09
