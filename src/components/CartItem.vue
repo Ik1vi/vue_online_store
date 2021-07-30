@@ -66,7 +66,9 @@ export default {
   props: ['item'],
   components: { AmountCounter },
   methods: {
-    ...mapActions(['deleteCartProduct']),
+    ...mapActions('cart', {
+      deleteCartProduct: 'deleteCartProduct',
+    }),
 
     deleteProduct() {
       this.deleteCartProduct({ basketItemId: this.item.id });

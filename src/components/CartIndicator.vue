@@ -16,7 +16,7 @@
       aria-label="Количество товаров"
       v-else
     >
-      {{$store.state.cartProducts.length}}
+      {{$store.state.cart.cartProducts.length}}
     </span>
   </router-link>
 </template>

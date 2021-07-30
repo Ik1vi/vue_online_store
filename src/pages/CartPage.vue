@@ -68,14 +68,16 @@ export default {
   components: { CartItem, ContentPreloader },
   methods: {
     numberFormat,
-    ...mapActions(['deleteCartProductsAll']),
+    ...mapActions('cart', {
+      deleteCartProductsAll: 'deleteCartProductsAll',
+    }),
 
     resetCart() {
       this.deleteCartProductsAll({ products: this.products });
     },
   },
   computed: {
-    ...mapGetters({
+    ...mapGetters('cart', {
       products: 'cartDetailProducts',
       totalPrice: 'cartTotalPrice',
       totalProductsCount: 'cartTotalProductText',

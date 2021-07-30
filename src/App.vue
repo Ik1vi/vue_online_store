@@ -27,7 +27,9 @@ export default {
     this.loadCart();
   },
   methods: {
-    ...mapActions(['loadCart']),
+    ...mapActions('cart', {
+      loadCart: 'loadCart',
+    }),
     ...mapMutations(['updateUserAccessKey']),
   },
 };

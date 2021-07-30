@@ -102,7 +102,9 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['addProductToCart']),
+    ...mapActions('cart', {
+      addProductToCart: 'addProductToCart',
+    }),
     numberFormat,
 
     checkCartProduct() {
@@ -158,7 +160,7 @@ export default {
     colors() {
       return this.product.colors;
     },
-    ...mapGetters({
+    ...mapGetters('cart', {
       products: 'cartDetailProducts',
     }),
   },

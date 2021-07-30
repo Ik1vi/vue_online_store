@@ -105,13 +105,13 @@ export default {
     if (this.orderInfo && this.orderInfo.id === this.$route.params.id) {
       return;
     }
-    this.$store.dispatch('loadOrderInfo', this.$route.params.id);
+    this.$store.dispatch('order/loadOrderInfo', this.$route.params.id);
   },
   computed: {
     orderInfo() {
-      return this.$store.state.orderInfo;
+      return this.$store.state.order.orderInfo;
     },
-    ...mapGetters({
+    ...mapGetters('order', {
       products: 'orderDetailProducts',
       totalPrice: 'orderTotalPrice',
       totalProductsCount: 'orderTotalProductText',

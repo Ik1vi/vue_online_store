@@ -186,8 +186,8 @@ export default {
           this.orderAdded = true;
           this.orderSending = false;
 
-          this.$store.commit('updateOrderInfo', response.data);
-          this.$store.commit('resetCart');
+          this.$store.commit('order/updateOrderInfo', response.data);
+          this.$store.commit('cart/resetCart');
           this.$router.push({ name: 'orderInfo', params: { id: response.data.id } });
         })
         .catch((error) => {
@@ -216,7 +216,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters({
+    ...mapGetters('cart', {
       products: 'cartDetailProducts',
       totalPrice: 'cartTotalPrice',
       totalProductsCount: 'cartTotalProductText',

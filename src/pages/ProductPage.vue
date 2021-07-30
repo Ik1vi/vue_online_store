@@ -233,12 +233,14 @@ export default {
     colors() {
       return this.productData.colors;
     },
-    ...mapGetters({
+    ...mapGetters('cart', {
       products: 'cartDetailProducts',
     }),
   },
   methods: {
-    ...mapActions(['addProductToCart']),
+    ...mapActions('cart', {
+      addProductToCart: 'addProductToCart',
+    }),
     numberFormat,
 
     changeContent(content) {
