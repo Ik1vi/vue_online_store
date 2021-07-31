@@ -74,6 +74,9 @@ const actions = {
       })
       .then((response) => {
         if (!rootState.userAccessKey) {
+          const date = (new Date(Date.now() + 86400e3)).toUTCString();
+          document.cookie = `userAccessKey=${response.data.user.accessKey}; expires=${date}`;
+
           localStorage.setItem('userAccessKey', response.data.user.accessKey);
           commit('updateUserAccessKey', response.data.user.accessKey, { root: true });
         }

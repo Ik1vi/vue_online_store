@@ -16,13 +16,19 @@
       aria-label="Количество товаров"
       v-else
     >
-      {{$store.state.cart.cartProducts.length}}
+      {{totalProductsCount}}
     </span>
   </router-link>
 </template>
 
 <script>
-export default {
+import { mapGetters } from 'vuex';
 
+export default {
+  computed: {
+    ...mapGetters('cart', {
+      totalProductsCount: 'cartTotalProductsCount',
+    }),
+  },
 };
 </script>

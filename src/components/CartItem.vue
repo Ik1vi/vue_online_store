@@ -81,7 +81,7 @@ export default {
         return this.item.quantity;
       },
       set(value) {
-        this.$store.dispatch('updateCartProductAmount', {
+        this.$store.dispatch('cart/updateCartProductAmount', {
           basketItemId: this.item.id,
           quantity: value,
         });

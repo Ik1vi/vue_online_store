@@ -87,7 +87,7 @@
         </ul>
 
         <span class="footer__copyright">
-          © 2020 Технозавррр
+          {{(new Date()).getFullYear()}} Технозавррр
         </span>
       </div>
     </footer>
