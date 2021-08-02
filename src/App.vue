@@ -20,7 +20,7 @@ export default {
     AppHeader,
   },
   created() {
-    const userAccessKey = localStorage.getItem('userAccessKey');
+    const userAccessKey = this.getCookie('userAccessKey');
     if (userAccessKey) {
       this.updateUserAccessKey(userAccessKey);
     }
@@ -31,6 +31,14 @@ export default {
       loadCart: 'loadCart',
     }),
     ...mapMutations(['updateUserAccessKey']),
+    getCookie(name) {
+      const cookie = {};
+      document.cookie.split(';').forEach((el) => {
+        const [k, v] = el.split('=');
+        cookie[k.trim()] = v;
+      });
+      return cookie[name];
+    },
   },
 };
 </script>
