@@ -1,5 +1,6 @@
 <template>
   <div>
+    <CookieInfo />
     <AppHeader />
 
     <router-view />
@@ -13,11 +14,13 @@ import { mapActions, mapMutations } from 'vuex';
 
 import AppFooter from '@/components/AppFooter.vue';
 import AppHeader from '@/components/AppHeader.vue';
+import CookieInfo from '@/components/CookieInfo.vue';
 
 export default {
   components: {
     AppFooter,
     AppHeader,
+    CookieInfo,
   },
   created() {
     const userAccessKey = this.getCookie('userAccessKey');
