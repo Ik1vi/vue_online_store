@@ -3,7 +3,6 @@
     <CookieInfo
       v-show="isCookieBlock"
       :is-cookie-block.sync="isCookieBlock"
-      :user-access-key="userAccessKey"
     />
     <AppHeader />
 
@@ -24,7 +23,6 @@ export default {
   data() {
     return {
       isCookieBlock: true,
-      userAccessKey: '',
     };
   },
   components: {

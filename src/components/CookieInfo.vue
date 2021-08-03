@@ -28,9 +28,10 @@
 
 <script>
 import { mapMutations, mapActions } from 'vuex';
+import Cookies from 'js-cookie';
 
 export default {
-  props: ['isCookieBlock', 'userAccessKey'],
+  props: ['isCookieBlock'],
 
   methods: {
     ...mapMutations(['updateUserAccessKey']),
@@ -41,35 +42,24 @@ export default {
     cookieAgree() {
       this.$emit('update:isCookieBlock', false);
       localStorage.removeItem('rejectData');
-      this.setCookie('userAccessKey', this.$store.state.userAccessKey);
+      Cookies.set('userAccessKey', this.$store.state.userAccessKey, { expires: 1 });
     },
     cookieReject() {
       this.$emit('update:isCookieBlock', false);
       localStorage.setItem('rejectData', new Date().toLocaleDateString());
-      this.getAllCookies();
+      this.deleteAllCookies();
     },
     getAllCookies() {
-      const pairs = document.cookie.split(';');
-      const cookies = {};
-      for (let i = 0; i < pairs.length; i + 1) {
-        const pair = pairs[i].trim().split('=');
-        cookies[pair[0]] = pair[1];
-      }
-      return cookies;
-    },
-    deleteCookie(name) {
-      document.cookie = `${name}=; Max-Age=0`;
+      return Cookies.get();
     },
     deleteAllCookies() {
       const cookies = this.getAllCookies();
-      // for (const [cookie, _] of Object.entries(object1)) {
-      //   this.deleteCookie(cookie);
-      // }
-      console.log(cookies);
-      // Object.keys(cookies).map((cookie) => this.deleteCookie(cookie));
-    },
-    setCookie(name, value, expires = (new Date(Date.now() + 86400e3)).toUTCString()) {
-      document.cookie = `${name}=${value}; expires=${expires}`;
+      // eslint-disable-next-line no-restricted-syntax
+      for (const cookie in cookies) {
+        if (cookies) {
+          Cookies.remove(cookie);
+        }
+      }
     },
   },
 };

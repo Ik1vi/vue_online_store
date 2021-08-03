@@ -9,9 +9,10 @@
     "push": "cd dist && git push -f https://github.com/Ik1vi/vue_online_store_deploy.git main:gh-pages"
   },
   "dependencies": {
-    "@vue/cli-plugin-eslint": "^4.5.13",
+    "@vue/cli-plugin-eslint": "^3.1.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "js-cookie": "^3.0.0",
     "mitt": "^2.1.0",
     "vue": "^2.6.14",
     "vue-router": "^3.5.2",
@@ -20,7 +21,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli-service": "^3.12.1",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/eslint-config-airbnb": "^5.0.2",
     "babel-eslint": "^10.1.0",
