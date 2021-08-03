@@ -148,9 +148,9 @@ a {
   align-items: center;
 
   width: 100%;
-  padding: 20px 40px;
+  padding: 10px 40px;
   background: rgba(158, 255, 0, 0.7);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   line-height: 22px;
 }
@@ -168,56 +168,56 @@ a {
 }
 .cookie__button {
   min-width: 200px;
-  max-height: 55px;
-  padding: 15px 10px;
+  max-height: 40px;
+  padding: 8px 10px;
   
   border: none;
   background-color: #272727;
   color: white;
   text-align: center;
-  font-size: 16px;
+  font-size: 12px;
   cursor: pointer;
 }
-.cookie__button--delay {
+.cookie__button--reject {
   background-color: unset;
   color: white;
   border: solid white;
 }
 .cookie__button-item {
   padding: 0;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .cookie__button-item:last-child{
   margin-bottom: 0;
 }
 .header {
-    background-color: #272727;
+  background-color: #272727;
 }
 .header__wrapper {
-    display: grid;
-    grid-template-columns: 30% auto 26% 40px;
-    grid-column-gap: 40px;
-    -webkit-box-align: end;
-    -ms-flex-align: end;
-    align-items: flex-end;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    padding-top: 23px;
-    padding-bottom: 23px;
+  display: grid;
+  grid-template-columns: 30% auto 26% 40px;
+  grid-column-gap: 40px;
+  -webkit-box-align: end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding-top: 23px;
+  padding-bottom: 23px;
 }
 .header__info {
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    color: #fff;
-    text-transform: uppercase;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #fff;
+  text-transform: uppercase;
 }
 .header__logo {
-    display: block;
-    width: 190px;
-    height: 33px;
-    margin: 0 auto;
+  display: block;
+  width: 190px;
+  height: 33px;
+  margin: 0 auto;
 }
 .header__tel {
     margin-left: auto;
@@ -1635,7 +1635,7 @@ a {
   }
   .cookie__button-item {
     margin-right: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 0;
   }
   .cookie__text {
     max-width: 100%;
@@ -1696,6 +1696,10 @@ a {
 @media (max-width: 700px) {
   .cookie__button-list {
     display: block;
+  }
+  .cookie__button-item {
+    margin-right: 0;
+    margin-bottom: 5px;
   }
     .header {
         min-width: 320px;

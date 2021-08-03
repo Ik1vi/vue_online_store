@@ -73,17 +73,19 @@ const actions = {
         },
       })
       .then((response) => {
-        if (!rootState.userAccessKey) {
-          const date = (new Date(Date.now() + 86400e3)).toUTCString();
-          document.cookie = `userAccessKey=${response.data.user.accessKey}; expires=${date}`;
-
-          commit('updateUserAccessKey', response.data.user.accessKey, { root: true });
-        }
         commit('updateCartProductsData', response.data.items);
         commit('syncCartProducts');
       })
       .then(() => {
         commit('updateCartDataLoading', false);
+      });
+  },
+  // eslint-disable-next-line no-unused-vars
+  getAccessKey({ commit, rootState }) {
+    return axios
+      .get(`${API_BASE_URL}/api/baskets`)
+      .then((response) => {
+        commit('updateUserAccessKey', response.data.user.accessKey, { root: true });
       });
   },
   addProductToCart({ commit, rootState }, { productOfferId, colorId, quantity }) {
